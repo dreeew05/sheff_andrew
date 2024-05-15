@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sheff_andrew/common/utils/app_navigation_bar.dart';
 import 'package:sheff_andrew/screens/home-page/components/recipe_carousel.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: RecipeCarousel(),
       ),
+      bottomNavigationBar: const AppNavigationBar(),
     );
   }
 }
