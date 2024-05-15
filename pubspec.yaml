@@ -10,7 +10,6 @@ dependencies:
   http: ^1.2.1
   cloud_firestore: ^4.17.3
   google_fonts: ^6.2.1
-  carousel_slider: ^4.2.1
   flutter:
     sdk: flutter
   firebase_core: ^2.31.0
