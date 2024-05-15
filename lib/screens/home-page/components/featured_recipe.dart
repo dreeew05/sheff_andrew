@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sheff_andrew/common/app_painter.dart';
+import 'package:sheff_andrew/common/utils/app_painter.dart';
 
 class FeaturedRecipe extends StatelessWidget {
   final Map<String, dynamic> recipe;
