@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:sheff_andrew/screens/home-page/home_page.dart';
 
 void main() async {
-  // runApp(const MainApp()); // Uncomment this line in the future
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // runApp(const MainApp()); // Uncomment this line in the future
   runApp(const MaterialApp(home: HomePage()));
 }
 
