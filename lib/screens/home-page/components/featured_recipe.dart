@@ -10,9 +10,10 @@ class FeaturedRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppPainter appPainter = AppPainter();
-    return SizedBox(
+    return Container(
       height: 255,
       width: 175,
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: Stack(
         children: [
           Align(
