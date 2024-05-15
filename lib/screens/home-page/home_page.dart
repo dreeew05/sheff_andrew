@@ -22,24 +22,26 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Bookmarked Recipes",
-              textAlign: TextAlign.left,
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 20),
+              child: Text(
+                "Bookmarked Recipes",
+                textAlign: TextAlign.left,
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-          RecipeCarousel()
-        ],
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            RecipeCarousel()
+          ],
+        ),
       ),
       bottomNavigationBar: const AppNavigationBar(),
     );
