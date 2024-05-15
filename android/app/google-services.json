@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "662414948226",
+    "project_id": "sheff-andrew-e1613",
+    "storage_bucket": "sheff-andrew-e1613.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662414948226:android:6646e7d9e03ab68f06419b",
+        "android_client_info": {
+          "package_name": "com.example.sheff_andrew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgkhxrsknDpl8dApMpsgt8K7VCjh_MG2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

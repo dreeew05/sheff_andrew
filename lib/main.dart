@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:sheff_andrew/screens/home-page/home_page.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  // runApp(const MainApp()); // Uncomment this line in the future
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MaterialApp(home: HomePage()));
 }
 
 class MainApp extends StatelessWidget {
