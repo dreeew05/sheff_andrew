@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sheff_andrew/screens/home-page/home_page.dart';
+import 'package:sheff_andrew/screens/signup/signin_page.dart';
+import 'package:sheff_andrew/screens/signup/signup_page.dart'; // Import the SignUpPage
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // runApp(const MainApp()); // Uncomment this line in the future
-  runApp(const MaterialApp(home: HomePage()));
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => SignInPage(),
+      '/signup': (context) => SignUpPage(),
+      // Add other routes here
+    },
+  ));
 }
 
 class MainApp extends StatelessWidget {
