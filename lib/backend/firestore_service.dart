@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: All in One File for Firestore Service
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
