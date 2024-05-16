@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Color Repository
+*/
+
 import 'dart:ui';
 
 class AppPainter {

@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Fetch from Edamam API to Firebase
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 

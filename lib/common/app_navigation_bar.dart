@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Instantantiatiable Navigation Bar
+*/
+
 import 'package:flutter/material.dart';
 
 class AppNavigationBar extends StatefulWidget {
