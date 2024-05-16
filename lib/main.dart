@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sheff_andrew/screens/home-page/home_page.dart';
 import 'package:sheff_andrew/screens/signup/signin_page.dart';
-import 'package:sheff_andrew/screens/signup/signup_page.dart'; // Import the SignUpPage
+import 'package:sheff_andrew/screens/signup/signup_page.dart';
+import 'package:sheff_andrew/screens/home-page/components/recipe_carousel.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,7 @@ void main() async {
     routes: {
       '/': (context) => SignInPage(),
       '/signup': (context) => SignUpPage(),
-      // Add other routes here
+      '/recipe_carousel': (context) => RecipeCarousel(), 
     },
   ));
 }
