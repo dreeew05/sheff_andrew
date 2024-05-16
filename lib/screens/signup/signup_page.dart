@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -24,11 +25,18 @@ class _SignUpPageState extends State<SignUpPage> {
           password: _passwordController.text.trim(),
         );
         if (newUser != null) {
+          // Add user information to Firestore
+          await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
+            'name': _nameController.text.trim(),
+            'email': _emailController.text.trim(),
+            'userKey': newUser.user!.uid,
+          });
+
           // Navigate to the next page or show a success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Sign up successful!')),
           );
-          Navigator.pushNamed(context, '/');  // Navigate to home or sign-in page
+          Navigator.pushNamed(context, '/'); 
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
