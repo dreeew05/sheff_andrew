@@ -11,8 +11,9 @@ class SignInPage extends StatelessWidget {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      // Navigate to the home page or show a success message
+      // Navigate to the recipe carousel page upon successful sign-in
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sign in successful!')));
+      Navigator.pushReplacementNamed(context, '/recipe_carousel');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
