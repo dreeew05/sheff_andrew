@@ -13,7 +13,7 @@ class SignInPage extends StatelessWidget {
       );
       // Navigate to the recipe carousel page upon successful sign-in
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sign in successful!')));
-      Navigator.pushReplacementNamed(context, '/recipe_carousel');
+      Navigator.pushReplacementNamed(context, '/homepage');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
