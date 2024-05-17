@@ -4,6 +4,7 @@ import 'package:sheff_andrew/screens/home-page/home_page.dart';
 import 'package:sheff_andrew/screens/signup/signin_page.dart';
 import 'package:sheff_andrew/screens/signup/signup_page.dart';
 import 'package:sheff_andrew/screens/home-page/components/recipe_carousel.dart'; 
+import 'package:sheff_andrew/screens/community_page/community.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,11 +13,14 @@ void main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => SignInPage(),
+      '/homepage': (context) => HomePage(),
       '/signup': (context) => SignUpPage(),
       '/recipe_carousel': (context) => RecipeCarousel(), 
+      'recipe_carousel/community': (context) => CommunityPage(), 
     },
   ));
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
