@@ -1,46 +1,171 @@
-/*
-  Author: Glen Andrew C. Bulaong
-  Purpose of this file: Carousel Effect for Featured Recipes
-*/
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sheff_andrew/backend/firestore_service.dart';
-import 'package:sheff_andrew/screens/home-page/components/featured_recipe.dart';
 
-class RecipeCarousel extends StatelessWidget {
-  final FirestoreService firestoreService = FirestoreService();
+class RecipeCarousel extends StatefulWidget {
+  RecipeCarousel({Key? key}) : super(key: key);
 
-  RecipeCarousel({super.key});
+  @override
+  _RecipeCarouselState createState() => _RecipeCarouselState();
+}
+
+class _RecipeCarouselState extends State<RecipeCarousel> {
+  final TextEditingController recipeNameController = TextEditingController();
+  final TextEditingController recipeProcedureController = TextEditingController();
+  final List<TextEditingController> ingredientControllers = [];
+
+  @override
+  void dispose() {
+    recipeNameController.dispose();
+    recipeProcedureController.dispose();
+    for (var controller in ingredientControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void addIngredientField() {
+    setState(() {
+      ingredientControllers.add(TextEditingController());
+    });
+  }
+
+  void removeIngredientField(int index) {
+    setState(() {
+      ingredientControllers[index].dispose();
+      ingredientControllers.removeAt(index);
+    });
+  }
+
+  Future<void> submitRecipe() async {
+    final recipeName = recipeNameController.text;
+    final recipeProcedure = recipeProcedureController.text;
+    final ingredients = ingredientControllers.map((controller) => controller.text).toList();
+
+    if (recipeName.isEmpty || recipeProcedure.isEmpty || ingredients.any((ingredient) => ingredient.isEmpty)) {
+      // Show an error message if any field is empty
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('All fields must be filled out'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Generate a unique ID for the new document
+    final docId = FirebaseFirestore.instance.collection('community').doc().id;
+
+    CollectionReference community = FirebaseFirestore.instance.collection('community');
+    await community.doc(docId).set({
+      'Primary Key:': docId,
+      'recipeName': recipeName,
+      'procedure': recipeProcedure,
+      'ingredients': ingredients,
+    });
+
+    // Navigate to Community Page
+    Navigator.pushNamed(context, 'recipe_carousel/community');
+  }
+
+  void clearFields() {
+    setState(() {
+      recipeNameController.clear();
+      recipeProcedureController.clear();
+      for (var controller in ingredientControllers) {
+        controller.clear();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: firestoreService.getRecipeStream(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          // Guard Clauses to Prevent Mishandle of Null Data
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final List recipeList = snapshot.data!.docs;
-
-          return SafeArea(
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    child: Row(
-                      children: recipeList.map((recipe) {
-                        return FeaturedRecipe(
-                            recipe: recipe.data() as Map<String, dynamic>);
-                      }).toList(),
-                    ),
-                  )));
-        });
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add a New Recipe'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: recipeNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Recipe Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: recipeProcedureController,
+                decoration: const InputDecoration(
+                  labelText: 'Recipe Procedure',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 10,
+              ),
+              const SizedBox(height: 16),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: ingredientControllers.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == ingredientControllers.length) {
+                    return ElevatedButton(
+                      onPressed: addIngredientField,
+                      child: const Text('Add Ingredient'),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: ingredientControllers[index],
+                              decoration: InputDecoration(
+                                labelText: 'Ingredient ${index + 1}',
+                                border: const OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.remove_circle),
+                            onPressed: () => removeIngredientField(index),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: submitRecipe,
+                child: const Text('Submit'),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: clearFields,
+                child: const Text('Clear'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
+
+
+
+

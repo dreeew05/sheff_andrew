@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sheff_andrew/common/utils/app_painter.dart';
+// import 'package:sheff_andrew/common/utils/app_painter.dart';
 
 class FeaturedRecipe extends StatelessWidget {
   final Map<String, dynamic> recipe;
@@ -14,7 +14,7 @@ class FeaturedRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppPainter appPainter = AppPainter();
+    // AppPainter appPainter = AppPainter();
     return Container(
       height: 255,
       width: 175,
@@ -26,7 +26,7 @@ class FeaturedRecipe extends StatelessWidget {
             child: Container(
                 margin: const EdgeInsets.only(top: 50),
                 decoration: BoxDecoration(
-                    color: appPainter.getCardColor(),
+                    // color: appPainter.getCardColor(),
                     borderRadius: const BorderRadius.all(Radius.circular(15))),
                 child: Container(
                   margin: const EdgeInsets.only(top: 50),
@@ -39,7 +39,7 @@ class FeaturedRecipe extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.poppins(
-                            color: appPainter.getCardTextColor(),
+                            // color: appPainter.getCardTextColor(),
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           )),
@@ -48,7 +48,7 @@ class FeaturedRecipe extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Text("Time",
                             style: GoogleFonts.poppins(
-                              color: appPainter.getCardTextColor(),
+                              // color: appPainter.getCardTextColor(),
                               fontSize: 14,
                             )),
                       ),
@@ -57,7 +57,7 @@ class FeaturedRecipe extends StatelessWidget {
                         children: [
                           Text(recipe['time_to_cook'].toString(),
                               style: GoogleFonts.poppins(
-                                color: appPainter.getCardTextColor(),
+                                // color: appPainter.getCardTextColor(),
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               )),
@@ -74,7 +74,7 @@ class FeaturedRecipe extends StatelessWidget {
                 width: 100,
                 child: CircleAvatar(
                     radius: 100,
-                    backgroundColor: appPainter.getCardColor(),
+                    // backgroundColor: appPainter.getCardColor(),
                     child: SizedBox(
                       height: 90,
                       width: 90,
