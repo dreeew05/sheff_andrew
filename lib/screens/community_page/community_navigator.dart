@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sheff_andrew/screens/community_page/community.dart';
+import 'package:sheff_andrew/screens/community_page/community_page.dart';
 
 class CommunityNavigator extends StatefulWidget {
   const CommunityNavigator({super.key});
