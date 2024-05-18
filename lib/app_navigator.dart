@@ -30,10 +30,13 @@ class AppNavigatorState extends State<AppNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    bool hasUnsavedChanges = true;
     return PopScope(
-      canPop: _navigatorKeys[_selectedIndex].currentState?.canPop() ?? false,
-      onPopInvoked: (bool didPop) {
-        if (!didPop) {
+      canPop: !hasUnsavedChanges,
+      onPopInvoked: (didPop) async {
+        bool shouldPop =
+            _navigatorKeys[_selectedIndex].currentState?.canPop() ?? false;
+        if (!didPop && shouldPop) {
           _navigatorKeys[_selectedIndex]
               .currentState
               ?.pop(_navigatorKeys[_selectedIndex].currentContext);
