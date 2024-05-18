@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sheff_andrew/screens/profile/profile_page.dart';
-import 'package:sheff_andrew/screens/recipe_form/recipe_form_page.dart';
+import 'package:sheff_andrew/screens/add_recipe/add_recipe.dart';
 
 class ProfileNavigator extends StatefulWidget {
-  const ProfileNavigator({Key? key});
+  const ProfileNavigator({super.key});
 
   @override
   ProfileNavigatorState createState() => ProfileNavigatorState();
@@ -20,8 +20,12 @@ class ProfileNavigatorState extends State<ProfileNavigator> {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) {
-            if (settings.name == '/recipeform') {
-              return RecipeFormPage();
+            // Use this to navigate certain pages inside this page
+            switch (settings.name) {
+              case '/addrecipe':
+                return AddRecipePage();
+              default:
+                break;
             }
             return const ProfilePage();
           },
