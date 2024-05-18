@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/recipeform');
+          Navigator.pushNamed(context, '/addrecipe');
         },
         label: const Text('Add recipe'),
         icon: const Icon(Icons.add),
