@@ -14,7 +14,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _acceptTerms = false;
 
   void _signUp() async {
@@ -26,7 +27,10 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         if (newUser != null) {
           // Add user information to Firestore
-          await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(newUser.user!.uid)
+              .set({
             'name': _nameController.text.trim(),
             'email': _emailController.text.trim(),
             'userKey': newUser.user!.uid,
@@ -36,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Sign up successful!')),
           );
-          Navigator.pushNamed(context, '/'); 
+          Navigator.pushNamed(context, '/');
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -153,7 +157,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Text('Sign Up'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     ),
                   ),
                   SizedBox(height: 20),
