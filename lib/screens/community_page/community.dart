@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommunityPage extends StatefulWidget {
+  const CommunityPage({super.key});
+
   @override
   _CommunityPageState createState() => _CommunityPageState();
 }
 
-class _CommunityPageState extends State<CommunityPage> with SingleTickerProviderStateMixin {
+class _CommunityPageState extends State<CommunityPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String recipeName = '';
   String ingredients = '';
@@ -36,8 +39,10 @@ class _CommunityPageState extends State<CommunityPage> with SingleTickerProvider
       if (querySnapshot.docs.isNotEmpty) {
         // Fetching the recipe name from the document
         setState(() {
-          recipeName = querySnapshot.docs.first['recipeName'] ?? 'No Recipe Name';
-          ingredients = querySnapshot.docs.first['ingredients'] ?? 'No Ingredients';
+          recipeName =
+              querySnapshot.docs.first['recipeName'] ?? 'No Recipe Name';
+          ingredients =
+              querySnapshot.docs.first['ingredients'] ?? 'No Ingredients';
           procedure = querySnapshot.docs.first['procedure'] ?? 'No Procedure';
         });
       } else {

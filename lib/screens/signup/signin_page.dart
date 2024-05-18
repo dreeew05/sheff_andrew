@@ -7,15 +7,18 @@ class SignInPage extends StatelessWidget {
 
   void _signIn(BuildContext context) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
       // Navigate to the recipe carousel page upon successful sign-in
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sign in successful!')));
-      Navigator.pushReplacementNamed(context, '/homepage');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Sign in successful!')));
+      Navigator.pushReplacementNamed(context, '/');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -92,30 +95,31 @@ class SignInPage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Image.asset('assets/google_icon.png'), // Add Google icon to your assets
-                      iconSize: 40,
-                      onPressed: () {
-                        // Handle Google sign in
-                      },
-                    ),
-                    SizedBox(width: 32),
-                    IconButton(
-                      icon: Image.asset('assets/facebook_icon.png'), 
-                      iconSize: 40,
-                      onPressed: () {
-                        // Handle Facebook sign in
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     IconButton(
+                //       icon: Image.asset(
+                //           'assets/google_icon.png'), // Add Google icon to your assets
+                //       iconSize: 40,
+                //       onPressed: () {
+                //         // Handle Google sign in
+                //       },
+                //     ),
+                //     SizedBox(width: 32),
+                //     IconButton(
+                //       icon: Image.asset('assets/facebook_icon.png'),
+                //       iconSize: 40,
+                //       onPressed: () {
+                //         // Handle Facebook sign in
+                //       },
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/signup'); 
+                    Navigator.pushNamed(context, '/signup');
                   },
                   child: Text("Don't have an account? Sign up"),
                 ),
