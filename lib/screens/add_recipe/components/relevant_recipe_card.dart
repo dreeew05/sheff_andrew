@@ -60,7 +60,7 @@ class RelevantRecipeCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        "Time to cook: ${totalTime.toString()}",
+                        "Time to cook: ${totalTime.toInt().toString()} minutes",
                         style: GoogleFonts.poppins(
                           fontSize: 13,
                           color: Colors.white,
