@@ -32,6 +32,7 @@ class GenerativeSearchState extends State<GenerativeSearch> {
       switch (response["status"]) {
         case "success":
           _showResultsFromApi = true;
+          _showNoResultFound = false;
           _recipeList = response["recipeList"];
           break;
         case "no_results":
@@ -76,13 +77,14 @@ class GenerativeSearchState extends State<GenerativeSearch> {
                             }
                             return null;
                           },
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              errorBorder: OutlineInputBorder(
+                          decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              errorBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                 color: Color.fromARGB(255, 214, 44, 32),
                                 width: 1.0,
                               )),
+                              labelStyle: GoogleFonts.poppins(),
                               labelText: "Enter Recipe Name"),
                         ),
                       ),
