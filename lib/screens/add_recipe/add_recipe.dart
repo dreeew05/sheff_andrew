@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/generative_search.dart';
+import 'package:sheff_andrew/screens/add_recipe/components/recipe_form.dart';
 
 class AddRecipePage extends StatefulWidget {
   const AddRecipePage({super.key});
@@ -52,9 +53,7 @@ class AddRecipePageState extends State<AddRecipePage>
         body: TabBarView(
           controller: _tabController,
           children: const <Widget>[
-            Center(
-              child: Text('Manual Entry'),
-            ),
+            RecipeForm(),
             GenerativeSearch(),
           ],
         ));
