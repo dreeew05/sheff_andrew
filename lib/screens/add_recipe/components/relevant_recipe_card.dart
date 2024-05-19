@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RelevantRecipeCard extends StatelessWidget {
+  final int index;
   final String label;
   final String image;
   final double totalTime;
   const RelevantRecipeCard(
       {super.key,
+      required this.index,
       required this.label,
       required this.image,
       required this.totalTime});
@@ -70,6 +72,23 @@ class RelevantRecipeCard extends StatelessWidget {
                   ),
                 ),
               ),
+              // Button
+              Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 5, right: 10),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          print(index);
+                        },
+                        child: Text(
+                          'Use this recipe',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                        )),
+                  )),
             ],
           ),
         ),
