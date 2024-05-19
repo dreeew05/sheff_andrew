@@ -43,7 +43,6 @@ class GenerativeSearchState extends State<GenerativeSearch> {
           _showResultsFromApi = false;
           _recipeList = [];
           break;
-
         default:
           break;
       }
@@ -56,7 +55,7 @@ class GenerativeSearchState extends State<GenerativeSearch> {
         key: _formKey,
         child: Container(
             margin: const EdgeInsets.only(
-              top: 30,
+              top: 20,
               bottom: 30,
               left: 20,
               right: 20,
@@ -118,20 +117,25 @@ class GenerativeSearchState extends State<GenerativeSearch> {
                                   fontSize: 24, fontWeight: FontWeight.bold)),
                           const SizedBox(height: 20),
                           CarouselSlider(
-                              options: CarouselOptions(
-                                height: 200,
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 1,
-                                initialPage: 0,
-                                enableInfiniteScroll: false,
-                                scrollDirection: Axis.horizontal,
-                              ),
-                              items: _recipeList
-                                  .map((recipe) => RelevantRecipeCard(
-                                      label: recipe['label'] as String,
-                                      image: recipe['image'] as String,
-                                      totalTime: recipe['totalTime'] as double))
-                                  .toList())
+                            options: CarouselOptions(
+                              height: 200,
+                              aspectRatio: 16 / 9,
+                              viewportFraction: 1,
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              scrollDirection: Axis.horizontal,
+                            ),
+                            items: _recipeList.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              var recipe = entry.value;
+                              return RelevantRecipeCard(
+                                index: index,
+                                label: recipe['label'] as String,
+                                image: recipe['image'] as String,
+                                totalTime: recipe['totalTime'] as double,
+                              );
+                            }).toList(),
+                          )
                         ],
                       )),
                   Visibility(
