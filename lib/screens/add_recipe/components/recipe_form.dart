@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Instantiatable class that creates a form for adding/modifying a recipe
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -99,6 +104,9 @@ class RecipeFormState extends State<RecipeForm>
                               const SizedBox(height: 20),
                               Container(
                                 margin: const EdgeInsets.only(left: 40),
+                                // Fucking Dropdown is bugged.
+                                // This is not our fault.
+                                // Shit moves the tabView when clicked
                                 child: DropdownMenu<String>(
                                   textStyle: GoogleFonts.poppins(),
                                   label: Text(
