@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Image Picker Provider
+*/
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';

@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Clickable Part of the ImagePickerDialog
+*/
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,10 +47,8 @@ class ClickableOption extends StatelessWidget {
           onPressed: () {
             if (optionText == 'Camera') {
               context.read<ImagePickerProvider>().getImage(ImageSource.camera);
-              print('Camera');
             } else {
               context.read<ImagePickerProvider>().getImage(ImageSource.gallery);
-              print('Gallery');
             }
             Navigator.pop(context);
           },

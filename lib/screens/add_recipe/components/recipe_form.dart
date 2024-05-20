@@ -106,10 +106,12 @@ class RecipeFormState extends State<RecipeForm>
                                     child: CircleAvatar(
                                       radius: 50,
                                       backgroundImage: recipeImage != null
-                                          ? FileImage(recipeImage)
-                                          : const NetworkImage(
-                                                  'https://media.cnn.com/api/v1/images/stellar/prod/140430115517-06-comfort-foods.jpg?q=w_1110,c_fill')
-                                              as ImageProvider<Object>?,
+                                          ? FileImage(recipeImage!)
+                                          : null, // No background if recipeImage is null
+                                      child: recipeImage == null
+                                          ? const Icon(Icons
+                                              .add_photo_alternate_outlined)
+                                          : null, // Add the icon if no image is loaded
                                     )),
                               ),
                               const SizedBox(height: 5),
