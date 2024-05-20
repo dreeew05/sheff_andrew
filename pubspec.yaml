@@ -17,6 +17,7 @@ dependencies:
   provider: ^6.1.2
   firebase_ui_auth: ^1.14.0
   carousel_slider: ^4.2.1
+  image_picker: ^1.1.1
 
 dev_dependencies:
   flutter_test:
