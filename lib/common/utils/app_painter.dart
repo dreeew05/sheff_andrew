@@ -13,4 +13,8 @@ class AppPainter {
   getCardTextColor() {
     return const Color.fromRGBO(72, 72, 72, 1);
   }
+
+  getDialogOptionColor() {
+    return const Color.fromRGBO(217, 225, 254, 1);
+  }
 }
