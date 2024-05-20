@@ -3,9 +3,14 @@
   Purpose of this file: Instantiatable class that creates a form for adding/modifying a recipe
 */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:sheff_andrew/dialogs/image_picker_dialog.dart';
+import 'package:sheff_andrew/providers/image_picker_provider.dart';
 
 class RecipeForm extends StatefulWidget {
   const RecipeForm({super.key});
@@ -42,6 +47,7 @@ class RecipeFormState extends State<RecipeForm>
 
   @override
   Widget build(BuildContext context) {
+    File? recipeImage = context.watch<ImagePickerProvider>().selectedImage;
     return Container(
         margin: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -87,6 +93,43 @@ class RecipeFormState extends State<RecipeForm>
                                 ),
                               ),
                               const SizedBox(height: 20),
+                              Align(
+                                alignment: Alignment.center,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const ImagePickerDialog();
+                                          });
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: recipeImage != null
+                                          ? FileImage(recipeImage)
+                                          : const NetworkImage(
+                                                  'https://media.cnn.com/api/v1/images/stellar/prod/140430115517-06-comfort-foods.jpg?q=w_1110,c_fill')
+                                              as ImageProvider<Object>?,
+                                    )),
+                              ),
+                              const SizedBox(height: 5),
+                              Align(
+                                alignment: Alignment.center,
+                                child: TextButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const ImagePickerDialog();
+                                        });
+                                  },
+                                  child: Text(
+                                    'Add Image',
+                                    style: GoogleFonts.poppins(),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
                               TextFormField(
                                 style: GoogleFonts.poppins(),
                                 decoration: InputDecoration(
