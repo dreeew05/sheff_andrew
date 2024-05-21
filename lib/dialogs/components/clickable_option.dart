@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/common/utils/app_painter.dart';
-import 'package:sheff_andrew/providers/image_picker_provider.dart';
+import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 
 class ClickableOption extends StatelessWidget {
   final String optionText;
@@ -46,9 +46,13 @@ class ClickableOption extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             if (optionText == 'Camera') {
-              context.read<ImagePickerProvider>().getImage(ImageSource.camera);
+              context
+                  .read<RecipeFormProvider>()
+                  .setPickedImage(ImageSource.camera);
             } else {
-              context.read<ImagePickerProvider>().getImage(ImageSource.gallery);
+              context
+                  .read<RecipeFormProvider>()
+                  .setPickedImage(ImageSource.gallery);
             }
             Navigator.pop(context);
           },
