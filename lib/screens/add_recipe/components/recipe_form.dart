@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/recipe_details.dart';
+import 'package:sheff_andrew/screens/add_recipe/components/recipe_ingredients.dart';
 
 class RecipeForm extends StatefulWidget {
   const RecipeForm({super.key});
@@ -37,14 +38,14 @@ class RecipeFormState extends State<RecipeForm>
 
   @override
   void dispose() {
-    context.read<RecipeFormProvider>().disposeControllers();
     _tabController.dispose();
+    context.read<RecipeFormProvider>().disposeControllers();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Provider
+    // Provi
     final providerWatcher = context.watch<RecipeFormProvider>();
     final providerReader = context.read<RecipeFormProvider>();
     return Container(
@@ -77,7 +78,7 @@ class RecipeFormState extends State<RecipeForm>
                   controller: _tabController,
                   children: const [
                     RecipeDetails(),
-                    Center(child: Text('Ingredients')),
+                    RecipeIngredients(),
                     Center(child: Text('Procedure')),
                     Center(child: Text('Additional Facts')),
                   ],
@@ -90,7 +91,7 @@ class RecipeFormState extends State<RecipeForm>
                     if (_currentIndex == _tabController.length - 1) {
                       // ScaffoldMessenger.of(context).showSnackBar(
                       //     const SnackBar(content: Text('Processing Data')));
-                      providerReader.clearForm();
+                      providerReader.clearWholeForm();
                       Navigator.pop(context);
                     } else {
                       if (_currentIndex < _tabController.length - 1) {
