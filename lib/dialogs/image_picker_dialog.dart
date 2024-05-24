@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sheff_andrew/dialogs/components/clickable_option.dart';
 
 class ImagePickerDialog extends StatelessWidget {
-  const ImagePickerDialog({super.key});
+  final String imageType;
+  const ImagePickerDialog({super.key, required this.imageType});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +18,20 @@ class ImagePickerDialog extends StatelessWidget {
         'Choose an image source',
         style: GoogleFonts.poppins(fontSize: 24),
       ),
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClickableOption(optionText: 'Camera', orientation: 'top'),
-          SizedBox(height: 7.5),
-          ClickableOption(optionText: 'Gallery', orientation: 'bottom')
+          ClickableOption(
+            optionText: 'Camera',
+            orientation: 'top',
+            imageType: imageType,
+          ),
+          const SizedBox(height: 7.5),
+          ClickableOption(
+            optionText: 'Gallery',
+            orientation: 'bottom',
+            imageType: imageType,
+          )
         ],
       ),
       actions: <Widget>[
