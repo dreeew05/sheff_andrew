@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
+import 'package:sheff_andrew/screens/add_recipe/components/recipe_additional_information.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/recipe_details.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/recipe_ingredients.dart';
+import 'package:sheff_andrew/screens/add_recipe/components/recipe_procedure.dart';
 
 class RecipeForm extends StatefulWidget {
   const RecipeForm({super.key});
@@ -79,8 +81,8 @@ class RecipeFormState extends State<RecipeForm>
                   children: const [
                     RecipeDetails(),
                     RecipeIngredients(),
-                    Center(child: Text('Procedure')),
-                    Center(child: Text('Additional Facts')),
+                    RecipeProcedure(),
+                    RecipeAdditionalInformation(),
                   ],
                 ),
               ),

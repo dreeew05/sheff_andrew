@@ -8,25 +8,32 @@ class RecipeFormProvider extends ChangeNotifier {
   File? _recipeImage;
   File? _ingredientImage;
   final List<Ingredient> _ingredients = [];
+  final List<String> _steps = [];
   final TextEditingController _recipeNameController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _timeToCookController = TextEditingController();
   final TextEditingController _mealTypeController = TextEditingController();
+  final TextEditingController _caloriesController = TextEditingController();
 
   // Getters
   File? get recipeImage => _recipeImage;
   File? get ingredientImage => _ingredientImage;
   List<Ingredient> get ingredients => _ingredients;
+  List<String> get steps => _steps;
   TextEditingController get recipeNameController => _recipeNameController;
   TextEditingController get category => _categoryController;
   TextEditingController get timeToCook => _timeToCookController;
   TextEditingController get mealTypeController => _mealTypeController;
+  TextEditingController get caloriesController => _caloriesController;
 
   void disposeControllers() {
+    // Details
     _recipeNameController.dispose();
     _categoryController.dispose();
     _timeToCookController.dispose();
     _mealTypeController.dispose();
+    // Additional Information
+    _caloriesController.dispose();
   }
 
   void clearWholeForm() {
@@ -67,5 +74,16 @@ class RecipeFormProvider extends ChangeNotifier {
       _ingredientImage = File(pickedFile.path);
       notifyListeners();
     }
+  }
+
+  // Recipe Procedure
+  void addStep(String step) {
+    _steps.add(step);
+    notifyListeners();
+  }
+
+  void removeStep(String stepToDelete) {
+    _steps.removeWhere((step) => step == stepToDelete);
+    notifyListeners();
   }
 }
