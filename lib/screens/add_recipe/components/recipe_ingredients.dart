@@ -105,7 +105,7 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
                           style: GoogleFonts.poppins(),
                         ),
                         subtitle: Text(
-                          'Quantity: ${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
+                          '${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
                           style: GoogleFonts.poppins(),
                         ),
                         leading: providerWatcher.ingredients[index].image !=
@@ -149,8 +149,7 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
-                            providerReader.removeIngredient(
-                                providerWatcher.ingredients[index].label);
+                            providerReader.removeIngredient(index);
                           },
                         ),
                       ),
