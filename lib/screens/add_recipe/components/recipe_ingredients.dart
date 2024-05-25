@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +17,7 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
     final providerWatcher = context.watch<RecipeFormProvider>();
     final providerReader = context.read<RecipeFormProvider>();
 
-    bool showGuide = providerWatcher.ingredients.isEmpty ? true : false;
+    bool showGuide = providerWatcher.ingredients.isEmpty;
 
     return Container(
       margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -60,10 +58,9 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.grey,
-                      width: 1, // Border width
+                      width: 1,
                     ),
-                    borderRadius: BorderRadius.circular(
-                        12.0), // Optional: for rounded corners
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -100,15 +97,15 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
                   itemCount: providerWatcher.ingredients.length,
                   itemBuilder: (context, index) {
                     return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      elevation: 4.0,
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      elevation: 4,
                       child: ListTile(
                         title: Text(
                           providerWatcher.ingredients[index].label,
                           style: GoogleFonts.poppins(),
                         ),
                         subtitle: Text(
-                          'Quantity: ${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
+                          '${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
                           style: GoogleFonts.poppins(),
                         ),
                         leading: providerWatcher.ingredients[index].image !=
@@ -149,12 +146,11 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
                                     ),
                                   ))
                             : const Icon(Icons.fastfood),
-                        trailing: GestureDetector(
-                          onTap: () {
-                            providerReader.removeIngredient(
-                                providerWatcher.ingredients[index].label);
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            providerReader.removeIngredient(index);
                           },
-                          child: const Icon(Icons.delete),
                         ),
                       ),
                     );
