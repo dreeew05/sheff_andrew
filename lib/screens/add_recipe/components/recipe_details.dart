@@ -23,97 +23,123 @@ class RecipeDetails extends StatefulWidget {
 
 class _RecipeDetailsState extends State<RecipeDetails> {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final providerWatcher = context.watch<RecipeFormProvider>();
     final providerReader = context.read<RecipeFormProvider>();
     final recipeImage = providerWatcher.recipeImage;
     return Container(
         margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Recipe Details",
-                style: GoogleFonts.poppins(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              ImagePick(image: recipeImage, imageType: 'recipe'),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: providerReader.recipeNameController,
-                style: GoogleFonts.poppins(),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Color.fromARGB(255, 214, 44, 32),
-                    width: 1.0,
-                  )),
-                  labelText: 'Recipe Name',
-                  labelStyle: GoogleFonts.poppins(),
-                  icon: const Icon(Icons.local_dining),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                margin: const EdgeInsets.only(left: 40),
-                // Fucking Dropdown is bugged.
-                // This is not our fault.
-                // Shit moves the tabView when clicked
-                child: DropdownMenu<String>(
-                  controller: providerReader.mealTypeController,
-                  textStyle: GoogleFonts.poppins(),
-                  label: Text(
-                    "Meal Type",
-                    style: GoogleFonts.poppins(fontSize: 15),
+        child: Form(
+          key: providerReader.formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Recipe Details",
+                  style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
-                  initialSelection: _mealTypeEntries[0],
-                  dropdownMenuEntries: _mealTypeEntries
-                      .map<DropdownMenuEntry<String>>((String value) {
-                    return DropdownMenuEntry(
-                      value: value,
-                      label: value,
-                    );
-                  }).toList(),
                 ),
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                style: GoogleFonts.poppins(),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Color.fromARGB(255, 214, 44, 32),
-                    width: 1.0,
-                  )),
-                  labelText: 'Category',
-                  labelStyle: GoogleFonts.poppins(),
-                  icon: const Icon(Icons.category),
+                const SizedBox(height: 20),
+                ImagePick(image: recipeImage, imageType: 'recipe'),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: providerReader.recipeNameController,
+                  style: GoogleFonts.poppins(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Color.fromARGB(255, 214, 44, 32),
+                      width: 1.0,
+                    )),
+                    labelText: 'Recipe Name',
+                    labelStyle: GoogleFonts.poppins(),
+                    icon: const Icon(Icons.local_dining),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the recipe name';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                style: GoogleFonts.poppins(),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Color.fromARGB(255, 214, 44, 32),
-                    width: 1.0,
-                  )),
-                  labelText: 'Time to Cook (in minutes)',
-                  labelStyle: GoogleFonts.poppins(),
-                  icon: const Icon(Icons.alarm),
+                const SizedBox(height: 20),
+                Container(
+                  margin: const EdgeInsets.only(left: 40),
+                  // Fucking Dropdown is bugged.
+                  // This is not our fault.
+                  // Shit moves the tabView when clicked
+                  child: DropdownMenu<String>(
+                    controller: providerReader.mealTypeController,
+                    textStyle: GoogleFonts.poppins(),
+                    label: Text(
+                      "Meal Type",
+                      style: GoogleFonts.poppins(fontSize: 15),
+                    ),
+                    initialSelection: _mealTypeEntries[0],
+                    dropdownMenuEntries: _mealTypeEntries
+                        .map<DropdownMenuEntry<String>>((String value) {
+                      return DropdownMenuEntry(
+                        value: value,
+                        label: value,
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 15),
+                TextFormField(
+                  style: GoogleFonts.poppins(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Color.fromARGB(255, 214, 44, 32),
+                      width: 1.0,
+                    )),
+                    labelText: 'Category',
+                    labelStyle: GoogleFonts.poppins(),
+                    icon: const Icon(Icons.category),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the category';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  style: GoogleFonts.poppins(),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Color.fromARGB(255, 214, 44, 32),
+                      width: 1.0,
+                    )),
+                    labelText: 'Time to Cook (in minutes)',
+                    labelStyle: GoogleFonts.poppins(),
+                    icon: const Icon(Icons.alarm),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the time to cook the recipe';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
         ));
   }
