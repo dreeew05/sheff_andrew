@@ -11,13 +11,8 @@ class FetchFromApi {
   final String _appID = '9aa911ef';
   final String _appKey = '73fab8b9341849a9541bd719b39b3ecb';
 
-  String getAppId() {
-    return _appID;
-  }
-
-  String getAppKey() {
-    return _appKey;
-  }
+  String get appID => _appID;
+  String get appKey => _appKey;
 
   Future<http.Response> queryRequest(String query) {
     query = query.replaceAll(' ', '%20');
@@ -26,8 +21,8 @@ class FetchFromApi {
         https://api.edamam.com/api/recipes/v2
         ?type=public
         &q=$query
-        &app_id=${getAppId()}
-        &app_key=${getAppKey()}
+        &app_id=$appID
+        &app_key=$appKey
       '''
           .replaceAll('\n', '')
           .replaceAll(' ', '')),
@@ -84,8 +79,8 @@ class FetchFromApi {
 }
 
 // Example usage
-void main() async {
-  final apiClient = FetchFromApi();
-  final response = await apiClient.fetchRecipes("Margarita");
-  print(response);
-}
+// void main() async {
+//   final apiClient = FetchFromApi();
+//   final response = await apiClient.fetchRecipes("Margarita");
+//   print(response);
+// }

@@ -18,4 +18,8 @@ class Ingredient {
     }
     return false;
   }
+
+  void replaceToLink(String imageLink) {
+    image = imageLink;
+  }
 }

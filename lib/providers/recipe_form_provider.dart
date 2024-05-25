@@ -1,9 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sheff_andrew/backend/firebase_storage_service.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
+import 'package:sheff_andrew/models/recipe_form_model.dart';
+
+const String recipeImagesFolder = 'recipes';
+const String ingredientsImagesFolder = 'ingredients';
 
 class RecipeFormProvider extends ChangeNotifier {
   File? _recipeImage;
@@ -15,6 +21,7 @@ class RecipeFormProvider extends ChangeNotifier {
   List<String> _tags = [];
   List<String> _cautions = [];
   List<Nutrients> _totalNutrients = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _recipeNameController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _timeToCookController = TextEditingController();
@@ -31,9 +38,10 @@ class RecipeFormProvider extends ChangeNotifier {
   List<String> get tags => _tags;
   List<String> get cautions => _cautions;
   List<Nutrients> get totalNutrients => _totalNutrients;
+  GlobalKey<FormState> get formKey => _formKey;
   TextEditingController get recipeNameController => _recipeNameController;
-  TextEditingController get category => _categoryController;
-  TextEditingController get timeToCook => _timeToCookController;
+  TextEditingController get categoryController => _categoryController;
+  TextEditingController get timeToCookController => _timeToCookController;
   TextEditingController get mealTypeController => _mealTypeController;
   TextEditingController get caloriesController => _caloriesController;
 
@@ -45,6 +53,7 @@ class RecipeFormProvider extends ChangeNotifier {
     _mealTypeController.dispose();
     // Additional Information
     _caloriesController.dispose();
+    notifyListeners();
   }
 
   void clearWholeForm() {
@@ -52,7 +61,56 @@ class RecipeFormProvider extends ChangeNotifier {
     _recipeNameController.clear();
     _categoryController.clear();
     _timeToCookController.clear();
-    notifyListeners();
+    _mealTypeController.clear();
+    _caloriesController.clear();
+    _ingredients = [];
+    _steps = [];
+    _dietLabels = [];
+    _healthLabels = [];
+    _tags = [];
+    _cautions = [];
+    _totalNutrients = [];
+    // notifyListeners();
+  }
+
+  void submitForm(BuildContext context, bool isValid) {
+    if (_formKey.currentState!.validate() && isValid) {
+      final fStorageService = FirebaseStorageService();
+      String recipeImageLink;
+      fStorageService
+          .uploadImageAngGetLink(_recipeImage, recipeImagesFolder)
+          .then((result) {
+        recipeImageLink = result;
+
+        for (Ingredient ingredient in _ingredients) {
+          fStorageService
+              .uploadImageAngGetLink(ingredient.image, ingredientsImagesFolder)
+              .then((result) {
+            String ingredientImageLink = result;
+            ingredient.replaceToLink(ingredientImageLink);
+          });
+
+          RecipeFormModel rfm = RecipeFormModel(
+              recipeImageLink: recipeImageLink,
+              recipeName: _recipeNameController.text,
+              category: _categoryController.text,
+              mealType: _mealTypeController.text,
+              timeToCook: _timeToCookController.text,
+              calories: _caloriesController.text,
+              ingredients: ingredients,
+              steps: steps,
+              dietLabels: dietLabels,
+              healthLabels: healthLabels,
+              tags: tags,
+              cautions: cautions,
+              totalNutrients: totalNutrients);
+
+          clearWholeForm();
+          Navigator.pop(context);
+          notifyListeners();
+        }
+      });
+    }
   }
 
   Future setRecipePickedImage(ImageSource source) async {
