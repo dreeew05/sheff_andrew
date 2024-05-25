@@ -100,6 +100,11 @@ class _RecipeProcedureState extends State<RecipeProcedure> {
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       elevation: 4,
                       child: ListTile(
+                        leading: Text(
+                          (index + 1).toString(),
+                          style: GoogleFonts.poppins(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                         title: Text(
                           providerWatcher.steps[index],
                           style: GoogleFonts.poppins(),
@@ -107,8 +112,7 @@ class _RecipeProcedureState extends State<RecipeProcedure> {
                         trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
-                              providerReader
-                                  .removeStep(providerWatcher.steps[index]);
+                              providerReader.removeStep(index);
                             }),
                       ),
                     );
