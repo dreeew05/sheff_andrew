@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sheff_andrew/backend/firebase_storage_service.dart';
+import 'package:sheff_andrew/backend/firestore_service.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
@@ -27,6 +28,7 @@ class RecipeFormProvider extends ChangeNotifier {
   final TextEditingController _timeToCookController = TextEditingController();
   final TextEditingController _mealTypeController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
+  late String _recipeImageLink;
 
   // Getters
   File? get recipeImage => _recipeImage;
@@ -56,6 +58,14 @@ class RecipeFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void disposeRecipeDetailsControllers() {
+    _recipeNameController.dispose();
+    _categoryController.dispose();
+    _timeToCookController.dispose();
+    _mealTypeController.dispose();
+    notifyListeners();
+  }
+
   void clearWholeForm() {
     _recipeImage = null;
     _recipeNameController.clear();
@@ -73,44 +83,46 @@ class RecipeFormProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  void submitForm(BuildContext context, bool isValid) {
-    if (_formKey.currentState!.validate() && isValid) {
-      final fStorageService = FirebaseStorageService();
-      String recipeImageLink;
-      fStorageService
-          .uploadImageAngGetLink(_recipeImage, recipeImagesFolder)
-          .then((result) {
-        recipeImageLink = result;
+  Future<void> uploadImages() async {
+    final fStorageService = FirebaseStorageService();
 
-        for (Ingredient ingredient in _ingredients) {
-          fStorageService
-              .uploadImageAngGetLink(ingredient.image, ingredientsImagesFolder)
-              .then((result) {
-            String ingredientImageLink = result;
-            ingredient.replaceToLink(ingredientImageLink);
-          });
+    // Upload Recipe Image
+    _recipeImageLink = await fStorageService.uploadImageAngGetLink(
+        _recipeImage, recipeImagesFolder);
 
-          RecipeFormModel rfm = RecipeFormModel(
-              recipeImageLink: recipeImageLink,
-              recipeName: _recipeNameController.text,
-              category: _categoryController.text,
-              mealType: _mealTypeController.text,
-              timeToCook: _timeToCookController.text,
-              calories: _caloriesController.text,
-              ingredients: ingredients,
-              steps: steps,
-              dietLabels: dietLabels,
-              healthLabels: healthLabels,
-              tags: tags,
-              cautions: cautions,
-              totalNutrients: totalNutrients);
-
-          clearWholeForm();
-          Navigator.pop(context);
-          notifyListeners();
-        }
-      });
+    // Upload each Ingredient Image
+    for (Ingredient ingredient in _ingredients) {
+      String ingredientImageLink = await fStorageService.uploadImageAngGetLink(
+          ingredient.image, ingredientsImagesFolder);
+      ingredient.replaceToLink(ingredientImageLink);
     }
+  }
+
+  void submitForm(BuildContext context) {
+    uploadImages().then((result) {
+      RecipeFormModel rfm = RecipeFormModel(
+          recipeImageLink: _recipeImageLink,
+          recipeName: _recipeNameController.text,
+          category: _categoryController.text,
+          mealType: _mealTypeController.text,
+          timeToCook: double.parse(_timeToCookController.text),
+          calories: _caloriesController.text,
+          ingredients: ingredients,
+          steps: steps,
+          dietLabels: dietLabels,
+          healthLabels: healthLabels,
+          tags: tags,
+          cautions: cautions,
+          totalNutrients: totalNutrients);
+
+      // print(rfm.recipeImageLink);
+      final FirestoreService firestoreService = FirestoreService();
+      firestoreService.insertData(rfm);
+
+      clearWholeForm();
+      Navigator.pop(context);
+      notifyListeners();
+    });
   }
 
   Future setRecipePickedImage(ImageSource source) async {
