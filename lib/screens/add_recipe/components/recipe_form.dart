@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sheff_andrew/common/utils/app_painter.dart';
 import 'package:sheff_andrew/dialogs/form_error_dialog.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/recipe_additional_information.dart';
@@ -20,127 +21,159 @@ class RecipeForm extends StatefulWidget {
   RecipeFormState createState() => RecipeFormState();
 }
 
-class RecipeFormState extends State<RecipeForm>
-    with SingleTickerProviderStateMixin {
-  // Form and Attributes
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late TabController _tabController;
+class RecipeFormState extends State<RecipeForm> {
   int _currentIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _currentIndex = _tabController.index;
-      });
-    });
-  }
+  bool get isFirstStep => _currentIndex == 0;
+  bool get isLastStep => _currentIndex == stepWidgets().length - 1;
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    context.read<RecipeFormProvider>().disposeControllers();
-    super.dispose();
-  }
+  // Steps
+  List<Step> stepWidgets() => [
+        Step(
+          isActive: _currentIndex == 0,
+          state: _currentIndex > 0 ? StepState.complete : StepState.indexed,
+          title: const Icon(Icons.description),
+          content: const RecipeDetails(),
+        ),
+        Step(
+          isActive: _currentIndex == 1,
+          state: _currentIndex > 1 ? StepState.complete : StepState.indexed,
+          title: const Icon(Icons.local_offer),
+          content: const RecipeIngredients(),
+        ),
+        Step(
+          isActive: _currentIndex == 2,
+          state: _currentIndex > 2 ? StepState.complete : StepState.indexed,
+          title: const Icon(Icons.format_list_numbered),
+          content: const RecipeProcedure(),
+        ),
+        Step(
+          isActive: _currentIndex == 3,
+          title: const Icon(Icons.info),
+          content: const RecipeAdditionalInformation(),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
-    // Provi
+    final AppPainter appPainter = AppPainter();
     final providerWatcher = context.watch<RecipeFormProvider>();
-    final providerReader = context.read<RecipeFormProvider>();
+
+    void isActionValid(int nextIndex) {
+      bool proceedNext = _currentIndex >= nextIndex;
+      if (!proceedNext) {
+        switch (_currentIndex) {
+          case 0:
+            if (providerWatcher.formKey.currentState!.validate()) {
+              proceedNext = true;
+            }
+            break;
+          case 1:
+          // Falls through
+          case 2:
+            final isEmpty = _currentIndex == 1
+                ? providerWatcher.ingredients.isEmpty
+                : providerWatcher.steps.isEmpty;
+            if (isEmpty) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FormErrorDialog(
+                        labelType:
+                            _currentIndex == 1 ? 'Ingredients' : 'Procedure');
+                  });
+            } else {
+              proceedNext = true;
+            }
+          case 3:
+            proceedNext = true;
+          default:
+            break;
+        }
+      }
+      if (proceedNext) {
+        setState(() {
+          _currentIndex = nextIndex;
+        });
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TabBar(controller: _tabController, tabs: const [
-            Tab(
-              icon: Icon(Icons.description),
-            ),
-            Tab(
-              icon: Icon(Icons.local_offer),
-            ),
-            Tab(
-              icon: Icon(Icons.format_list_numbered),
-            ),
-            Tab(
-              icon: Icon(Icons.info),
-            ),
-          ]),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                RecipeDetails(),
-                RecipeIngredients(),
-                RecipeProcedure(),
-                RecipeAdditionalInformation(),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_currentIndex == _tabController.length - 1) {
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //     const SnackBar(content: Text('Processing Data')));
-
-                  bool isIngredientsAndStepFilled =
-                      providerWatcher.ingredients.isNotEmpty &&
-                          providerWatcher.steps.isNotEmpty;
-
-                  // Guard clauses
-                  if (providerWatcher.ingredients.isEmpty) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const FormErrorDialog(
-                              labelType: 'Ingredients');
-                        });
-                  }
-                  if (providerWatcher.steps.isEmpty) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const FormErrorDialog(labelType: 'Steps');
-                        });
-                  }
-
-                  // Todo: Implement Validator Error Border[Bugged]
-                  providerReader.submitForm(
-                      context, isIngredientsAndStepFilled);
-                } else {
-                  if (_currentIndex < _tabController.length - 1) {
-                    _tabController.animateTo(_currentIndex + 1);
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(5.0), // Small border radius
-                ),
-              ),
-              child: _currentIndex == _tabController.length - 1
-                  ? Text(
-                      'Submit',
-                      style: GoogleFonts.poppins(),
-                    )
-                  : Text(
-                      'Next',
+      child: Stepper(
+        currentStep: _currentIndex,
+        type: StepperType.horizontal,
+        steps: stepWidgets(),
+        onStepCancel: () {
+          isFirstStep
+              ? null
+              : setState(() {
+                  _currentIndex -= 1;
+                });
+        },
+        onStepContinue: () {
+          if (isLastStep) {
+          } else {
+            isActionValid(_currentIndex + 1);
+          }
+        },
+        onStepTapped: (int nextIndex) {
+          isActionValid(nextIndex);
+        },
+        controlsBuilder: (context, details) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              children: [
+                if (!isFirstStep) ...[
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: details.onStepCancel,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: appPainter.getPrimaryWhite(),
+                        foregroundColor: appPainter.getPrimaryLavender(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text(
+                        'Back',
+                        style: GoogleFonts.poppins(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                ],
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (isLastStep) {
+                        providerWatcher.submitForm(context);
+                      } else {
+                        details.onStepContinue!();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: appPainter.getPrimaryLavender(),
+                      foregroundColor: appPainter.getPrimaryWhite(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      isLastStep ? 'Submit' : 'Next',
                       style: GoogleFonts.poppins(),
                     ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -6,8 +6,8 @@ class RecipeFormModel {
   String recipeName;
   String category;
   String mealType;
-  dynamic timeToCook;
-  dynamic calories;
+  double timeToCook;
+  String calories;
   List<Ingredient> ingredients;
   List<String> steps;
   List<String>? dietLabels;
