@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sheff_andrew/screens/community_page/anotherpage.dart';
+
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
@@ -9,13 +11,24 @@ class CommunityPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Community'),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Community Page',
               style: TextStyle(fontSize: 24),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AnotherPage(),
+                  ),
+                );
+              },
+              child: const Text('Go to Another Page'),
             ),
           ],
         ),

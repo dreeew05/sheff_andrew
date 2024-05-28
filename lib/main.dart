@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sheff_andrew/app_navigator.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 import 'package:sheff_andrew/screens/signup/signin_page.dart';
+import 'package:sheff_andrew/screens/signup/signup_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
                 }
               },
             ),
+        '/signup': (context) => SignUpPage(),
       },
     );
   }
