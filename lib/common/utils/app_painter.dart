@@ -17,4 +17,12 @@ class AppPainter {
   getDialogOptionColor() {
     return const Color.fromRGBO(217, 225, 254, 1);
   }
+
+  getPrimaryLavender() {
+    return const Color.fromRGBO(103, 80, 164, 1);
+  }
+
+  getPrimaryWhite() {
+    return const Color.fromRGBO(247, 242, 250, 1);
+  }
 }
