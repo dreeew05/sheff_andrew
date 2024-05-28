@@ -84,6 +84,8 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   // Shit moves the tabView when clicked
                   child: DropdownMenu<String>(
                     controller: providerWatcher.mealTypeController,
+                    enableFilter: true,
+                    requestFocusOnTap: true,
                     textStyle: GoogleFonts.poppins(),
                     label: Text(
                       "Meal Type",
