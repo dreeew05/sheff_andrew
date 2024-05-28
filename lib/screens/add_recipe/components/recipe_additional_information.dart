@@ -23,6 +23,12 @@ class RecipeAdditionalInformation extends StatefulWidget {
 class _RecipeAdditionalInformationState
     extends State<RecipeAdditionalInformation> {
   @override
+  void dispose() {
+    super.dispose();
+    context.read<RecipeFormProvider>().disposeAdditionalInfoController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final providerWatcher = context.watch<RecipeFormProvider>();
     final providerReader = context.read<RecipeFormProvider>();
@@ -149,7 +155,7 @@ class _RecipeAdditionalInformationState
                         .map((entry) {
                       int index = entry.key;
                       return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        margin: const EdgeInsets.symmetric(vertical: 4),
                         elevation: 1,
                         child: ListTile(
                           title: Text(

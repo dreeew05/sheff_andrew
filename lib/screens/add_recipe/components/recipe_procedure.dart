@@ -103,7 +103,7 @@ class _RecipeProcedureState extends State<RecipeProcedure> {
                 children: providerWatcher.steps.asMap().entries.map((entry) {
                   int index = entry.key;
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
                     elevation: 1,
                     child: ListTile(
                       title: Text(
