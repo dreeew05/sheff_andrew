@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/app_navigator.dart';
+import 'package:sheff_andrew/providers/generative_search_provider.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 import 'package:sheff_andrew/screens/signup/signin_page.dart';
 import 'package:sheff_andrew/screens/signup/signup_page.dart';
@@ -13,6 +14,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: ((context) => RecipeFormProvider())),
+      ChangeNotifierProvider(create: ((context) => GenerativeSearchProvider()))
     ],
     child: const MyApp(),
   ));

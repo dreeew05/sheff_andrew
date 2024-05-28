@@ -16,9 +16,13 @@ import 'package:sheff_andrew/models/recipe_form_model.dart';
 
 const String recipeImagesFolder = 'recipes';
 const String ingredientsImagesFolder = 'ingredients';
+const String defaultRecipeImage =
+    'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/recipes%2Frecipe-default-image.png?alt=media&token=ac225653-981f-46f8-b028-12533e0e89bc';
+const String defaultIngredientImage =
+    'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/ingredients%2Fdefault-ingredient-image.png?alt=media&token=520960ad-ee08-410e-b98a-3818f61122d9';
 
 class RecipeFormProvider extends ChangeNotifier {
-  File? _recipeImage;
+  dynamic _recipeImage;
   File? _ingredientImage;
   List<Ingredient> _ingredients = [];
   List<String> _steps = [];
@@ -36,7 +40,7 @@ class RecipeFormProvider extends ChangeNotifier {
   late String _recipeImageLink;
 
   // Getters
-  File? get recipeImage => _recipeImage;
+  dynamic get recipeImage => _recipeImage;
   File? get ingredientImage => _ingredientImage;
   List<Ingredient> get ingredients => _ingredients;
   List<String> get steps => _steps;
@@ -52,23 +56,16 @@ class RecipeFormProvider extends ChangeNotifier {
   TextEditingController get mealTypeController => _mealTypeController;
   TextEditingController get caloriesController => _caloriesController;
 
-  void disposeControllers() {
-    // Details
-    _recipeNameController.dispose();
-    _categoryController.dispose();
-    _timeToCookController.dispose();
-    _mealTypeController.dispose();
-    // Additional Information
-    _caloriesController.dispose();
-    notifyListeners();
-  }
-
   void disposeRecipeDetailsControllers() {
     _recipeNameController.dispose();
     _categoryController.dispose();
     _timeToCookController.dispose();
     _mealTypeController.dispose();
     notifyListeners();
+  }
+
+  void disposeAdditionalInfoController() {
+    _caloriesController.dispose();
   }
 
   void clearWholeForm() {
@@ -92,14 +89,24 @@ class RecipeFormProvider extends ChangeNotifier {
     final fStorageService = FirebaseStorageService();
 
     // Upload Recipe Image
-    _recipeImageLink = await fStorageService.uploadImageAngGetLink(
-        _recipeImage, recipeImagesFolder);
+    if (_recipeImage is File) {
+      _recipeImageLink = await fStorageService.uploadImageAngGetLink(
+          _recipeImage, recipeImagesFolder);
+    } else if (_recipeImage is String) {
+      _recipeImageLink = _recipeImage;
+    } else if (_recipeImage == null) {
+      _recipeImageLink = defaultRecipeImage;
+    }
 
     // Upload each Ingredient Image
     for (Ingredient ingredient in _ingredients) {
-      String ingredientImageLink = await fStorageService.uploadImageAngGetLink(
-          ingredient.image, ingredientsImagesFolder);
-      ingredient.replaceToLink(ingredientImageLink);
+      if (ingredient is File) {
+        String ingredientImageLink = await fStorageService
+            .uploadImageAngGetLink(ingredient.image, ingredientsImagesFolder);
+        ingredient.replaceToLink(ingredientImageLink);
+      } else {
+        ingredient.replaceToLink(defaultIngredientImage);
+      }
     }
   }
 
@@ -138,7 +145,12 @@ class RecipeFormProvider extends ChangeNotifier {
     }
   }
 
-  // Ingredients Dialog
+  void setRecipeImageFromSearch(String imageLink) {
+    _recipeImage = imageLink;
+    notifyListeners();
+  }
+
+  // Recipe Ingredients
   void clearIngredientImage() {
     _ingredientImage = null;
     notifyListeners();
@@ -151,6 +163,11 @@ class RecipeFormProvider extends ChangeNotifier {
 
   void removeIngredient(int index) {
     _ingredients = List.from(_ingredients)..removeAt(index);
+    notifyListeners();
+  }
+
+  void setIngredients(List<Ingredient> searchedIngredients) {
+    _ingredients = searchedIngredients;
     notifyListeners();
   }
 
@@ -221,6 +238,31 @@ class RecipeFormProvider extends ChangeNotifier {
 
   void removeCaution(int index) {
     _cautions = List.from(_cautions)..removeAt(index);
+    notifyListeners();
+  }
+
+  void setDietLabelsFromSearch(List<String> searchedDietLabels) {
+    _dietLabels = searchedDietLabels;
+    notifyListeners();
+  }
+
+  void setHealthLabelsFromSearch(List<String> searchedHealthLabels) {
+    _healthLabels = searchedHealthLabels;
+    notifyListeners();
+  }
+
+  void setTagsFromSearch(List<String> searchedTags) {
+    _tags = searchedTags;
+    notifyListeners();
+  }
+
+  void setCautionsFromSearch(List<String> searchedCautions) {
+    _cautions = searchedCautions;
+    notifyListeners();
+  }
+
+  void setTotalNutrientsFromSearch(List<Nutrients> searchedNutrients) {
+    _totalNutrients = searchedNutrients;
     notifyListeners();
   }
 }
