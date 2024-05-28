@@ -1,3 +1,8 @@
+/*
+  Author: Glen Andrew C. Bulaong
+  Purpose of this file: Allowing the user to upload images to Firebase Storage
+*/
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
