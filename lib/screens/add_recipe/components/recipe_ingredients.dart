@@ -20,7 +20,7 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
     bool showGuide = providerWatcher.ingredients.isEmpty;
 
     return Container(
-      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: const EdgeInsets.only(left: 3, right: 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,112 +51,110 @@ class _RecipeIngredientsState extends State<RecipeIngredients> {
           ),
           const SizedBox(height: 20),
           Visibility(
-              visible: showGuide,
-              child: Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Tap the icon to add",
-                        style: GoogleFonts.poppins(fontSize: 22),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AddIngredientDialog();
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.add_circle,
-                            size: 75,
-                          ))
-                    ],
-                  ),
+            visible: showGuide,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width * 1,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1,
                 ),
-              )),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Tap the icon to add",
+                    style: GoogleFonts.poppins(fontSize: 22),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const AddIngredientDialog();
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.add_circle,
+                        size: 75,
+                      ))
+                ],
+              ),
+            ),
+          ),
           Visibility(
               visible: !showGuide,
-              child: Expanded(
-                child: ListView.builder(
-                  itemCount: providerWatcher.ingredients.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      elevation: 4,
-                      child: ListTile(
-                        title: Text(
-                          providerWatcher.ingredients[index].label,
-                          style: GoogleFonts.poppins(),
-                        ),
-                        subtitle: Text(
-                          '${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
-                          style: GoogleFonts.poppins(),
-                        ),
-                        leading: providerWatcher.ingredients[index].image !=
-                                null
-                            ? (providerWatcher.ingredients[index].isImageFile()
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1.0),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.file(
-                                        providerWatcher
-                                            .ingredients[index].image!,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1.0),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.network(
-                                        providerWatcher
-                                            .ingredients[index].image!,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ))
-                            : const Icon(Icons.fastfood),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            providerReader.removeIngredient(index);
-                          },
-                        ),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children:
+                    providerWatcher.ingredients.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    elevation: 1,
+                    child: ListTile(
+                      title: Text(
+                        providerWatcher.ingredients[index].label,
+                        style: GoogleFonts.poppins(),
                       ),
-                    );
-                  },
-                ),
-              ))
+                      subtitle: Text(
+                        '${providerWatcher.ingredients[index].quantity} ${providerWatcher.ingredients[index].unit}',
+                        style: GoogleFonts.poppins(),
+                      ),
+                      leading: providerWatcher.ingredients[index].image != null
+                          ? (providerWatcher.ingredients[index].isImageFile()
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.file(
+                                      providerWatcher.ingredients[index].image!,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      providerWatcher.ingredients[index].image!,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ))
+                          : const Icon(Icons.fastfood),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          providerReader.removeIngredient(index);
+                        },
+                      ),
+                    ),
+                  );
+                }).toList(),
+              )),
         ],
       ),
     );

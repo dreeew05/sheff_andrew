@@ -25,17 +25,17 @@ class _RecipeDetailsState extends State<RecipeDetails> {
   @override
   void dispose() {
     super.dispose();
+    context.read<RecipeFormProvider>().disposeRecipeDetailsControllers();
   }
 
   @override
   Widget build(BuildContext context) {
     final providerWatcher = context.watch<RecipeFormProvider>();
-    final providerReader = context.read<RecipeFormProvider>();
     final recipeImage = providerWatcher.recipeImage;
     return Container(
-        margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        margin: const EdgeInsets.only(left: 3, right: 3),
         child: Form(
-          key: providerReader.formKey,
+          key: providerWatcher.formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ImagePick(image: recipeImage, imageType: 'recipe'),
                 const SizedBox(height: 10),
                 TextFormField(
-                  controller: providerReader.recipeNameController,
+                  controller: providerWatcher.recipeNameController,
                   style: GoogleFonts.poppins(),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
@@ -78,7 +78,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                   // This is not our fault.
                   // Shit moves the tabView when clicked
                   child: DropdownMenu<String>(
-                    controller: providerReader.mealTypeController,
+                    controller: providerWatcher.mealTypeController,
                     textStyle: GoogleFonts.poppins(),
                     label: Text(
                       "Meal Type",
@@ -96,6 +96,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
                 const SizedBox(height: 15),
                 TextFormField(
+                  controller: providerWatcher.categoryController,
                   style: GoogleFonts.poppins(),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
@@ -117,6 +118,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                 ),
                 const SizedBox(height: 15),
                 TextFormField(
+                  controller: providerWatcher.timeToCookController,
                   style: GoogleFonts.poppins(),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],

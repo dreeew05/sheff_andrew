@@ -23,7 +23,7 @@ class _RecipeAdditionalInformationState
     final providerReader = context.read<RecipeFormProvider>();
 
     return Container(
-      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: const EdgeInsets.only(left: 3, right: 3),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +145,7 @@ class _RecipeAdditionalInformationState
                       int index = entry.key;
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 8),
-                        elevation: 4,
+                        elevation: 1,
                         child: ListTile(
                           title: Text(
                             providerWatcher.totalNutrients[index].label,
