@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sheff_andrew/dialogs/image_picker_dialog.dart';
 
 class ImagePick extends StatefulWidget {
   final String imageType;
-  final File? image;
+  final dynamic image;
   const ImagePick({super.key, required this.image, required this.imageType});
 
   @override
@@ -33,7 +31,9 @@ class _ImagePickState extends State<ImagePick> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage: widget.image != null
-                    ? FileImage(widget.image!)
+                    ? widget.image is String
+                        ? NetworkImage(widget.image!)
+                        : FileImage(widget.image!)
                     : null, // No background if recipeImage is null
                 child: widget.image == null
                     ? const Icon(Icons.add_photo_alternate_outlined)
