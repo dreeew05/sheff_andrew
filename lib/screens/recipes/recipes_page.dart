@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
+import 'components/recipe_card.dart';
 
 class RecipesPage extends StatefulWidget {
   const RecipesPage({super.key});
@@ -66,14 +67,20 @@ class _RecipesPageState extends State<RecipesPage> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasData) {
                   final List recipeList = snapshot.data!.docs;
+                  return GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                    ),
+                    itemCount: recipeList.length,
+                    itemBuilder: (context, index) {
+                      final recipe = recipeList[index].data() as Map<String, dynamic>;
 
-                  return ListView.builder(
-                      itemCount: recipeList.length,
-                      itemBuilder: (context, index) {
-                        final recipe =
-                            recipeList[index].data() as Map<String, dynamic>;
-                        return Text(recipe['name']);
-                      });
+                      return RecipeCard(recipe: recipe);
+                    },
+                  );
+
                 } else {
                   return Center(
                     child: Text(
