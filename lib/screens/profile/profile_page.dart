@@ -7,8 +7,37 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // For sign out
-Future<void> signOut() async {
+Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();
+}
+
+//Alert Dialogue for signing out
+Future<void> _signOutDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Sign out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              _signOut();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Sign out'),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class ProfilePage extends StatefulWidget {
@@ -63,12 +92,13 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
         actions: [
           GestureDetector(
-            onTap: () => signOut(),
+            onTap: () => _signOutDialog(context),
             child: Row(
               children: [
                 const Text("Sign out"),
                 IconButton(
-                    onPressed: () => signOut(), icon: const Icon(Icons.logout)),
+                    onPressed: () => _signOutDialog(context),
+                    icon: const Icon(Icons.logout)),
               ],
             ),
           ),
