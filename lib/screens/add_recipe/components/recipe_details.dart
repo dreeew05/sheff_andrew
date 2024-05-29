@@ -29,8 +29,8 @@ class RecipeDetails extends StatefulWidget {
 class _RecipeDetailsState extends State<RecipeDetails> {
   @override
   void dispose() {
-    super.dispose();
     context.read<RecipeFormProvider>().disposeRecipeDetailsControllers();
+    super.dispose();
   }
 
   @override

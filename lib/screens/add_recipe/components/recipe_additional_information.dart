@@ -24,8 +24,8 @@ class _RecipeAdditionalInformationState
     extends State<RecipeAdditionalInformation> {
   @override
   void dispose() {
-    super.dispose();
     context.read<RecipeFormProvider>().disposeAdditionalInfoController();
+    super.dispose();
   }
 
   @override
