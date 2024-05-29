@@ -28,10 +28,19 @@ class FirestoreService {
     return user?.uid;
   }
 
-  // Read Data
+  // Fetch all recipes
   Stream<QuerySnapshot> getRecipeStream() {
     final recipeStream = _recipes.snapshots();
     return recipeStream;
+  }
+
+  // Fetch relevant recipe
+  Stream<QuerySnapshot> getSearchedRecipeStream(String query) {
+    final relevantRecipeStream = _recipes
+        .where('name', isGreaterThanOrEqualTo: query)
+        .where('category', isGreaterThanOrEqualTo: query)
+        .snapshots();
+    return relevantRecipeStream;
   }
 
   // Insert Data
