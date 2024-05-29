@@ -4,13 +4,12 @@
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
 
 String capitalizeFirstLetter(String text) {
-  if (text == null || text.isEmpty) return text;
+  if (text.isEmpty) return text;
   return text[0].toUpperCase() + text.substring(1);
 }
 

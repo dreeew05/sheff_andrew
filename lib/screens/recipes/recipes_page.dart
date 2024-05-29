@@ -76,7 +76,6 @@ class _RecipesPageState extends State<RecipesPage> {
                     itemCount: recipeList.length,
                     itemBuilder: (context, index) {
                       final recipe = recipeList[index].data() as Map<String, dynamic>;
-
                       return RecipeCard(recipe: recipe);
                     },
                   );
