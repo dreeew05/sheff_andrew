@@ -37,20 +37,21 @@ class FirestoreService {
   // Insert Data
   Future<void> insertData(RecipeFormModel recipeForm) async {
     try {
-      DocumentReference docRef = await _recipes.add({
+      // Create post first, to generate the post key
+      DocumentReference docRef = await _post.add({
+        'user': await getCurrentUserID(),
+        'date_posted': Timestamp.now(),
+      });
+
+      String documentID = docRef.id;
+
+      await _recipes.add({
         'category': recipeForm.category,
         'image': recipeForm.recipeImageLink,
         'name': recipeForm.recipeName,
         'time_to_cook': recipeForm.timeToCook,
         'meal_type': recipeForm.mealType,
-      });
-
-      String documentID = docRef.id;
-
-      await _post.add({
-        'user': await getCurrentUserID(),
-        'recipe_key': documentID,
-        'date_posted': Timestamp.now(),
+        'post_key': documentID,
       });
 
       await _recipeInfo.add({
@@ -60,7 +61,7 @@ class FirestoreService {
         'tags': recipeForm.tags, // Optional
         'cautions': recipeForm.cautions, // Optional
         'calories': recipeForm.calories, // Optional
-        'recipe_key': documentID,
+        'post_key': documentID,
       });
 
       // Each Ingredient has its own attributes
@@ -70,7 +71,7 @@ class FirestoreService {
           'quantity': ingredient.quantity,
           'unit': ingredient.unit,
           'image': ingredient.image,
-          'recipe_key': documentID
+          'post_key': documentID
         });
       }
 
@@ -82,7 +83,7 @@ class FirestoreService {
             'label': nutrient.label,
             'quantity': nutrient.quantity,
             'unit': nutrient.unit,
-            'recipe_key': documentID
+            'post_key': documentID
           });
         }
       }
