@@ -47,10 +47,10 @@ class _AddIngredientDialogState extends State<AddIngredientDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _labelController.dispose();
     _quantityController.dispose();
     _unitController.dispose();
+    super.dispose();
   }
 
   void clearForm() {

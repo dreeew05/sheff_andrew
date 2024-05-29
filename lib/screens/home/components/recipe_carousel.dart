@@ -38,8 +38,16 @@ class RecipeCarousel extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
                     children: recipeList.map((recipe) {
+                      final postKey = recipe.data()['post_key'] as String;
+                      final name = recipe.data()['name'] as String;
+                      final image = recipe.data()['image'] as String;
+                      final timeToCook =
+                          recipe.data()['time_to_cook'].toString();
                       return FeaturedRecipe(
-                          recipe: recipe.data() as Map<String, dynamic>);
+                        image: image, name: name, timeToCook: timeToCook,
+                        postKey: postKey,
+                        // recipe: recipe.data() as Map<String, dynamic>
+                      );
                     }).toList(),
                   ),
                 ),

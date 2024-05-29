@@ -2,12 +2,16 @@
   Author: Glen Andrew C. Bulaong
   Purpose of this file: All in One File for Firestore Service
 */
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
+
+String capitalizeFirstLetter(String text) {
+  if (text == null || text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+}
 
 class FirestoreService {
   // Collections
@@ -28,6 +32,17 @@ class FirestoreService {
     return user?.uid;
   }
 
+  // Fetch specific document given the post_key
+  Future<DocumentSnapshot<Map<String, dynamic>>> fetchDocument(
+      String collection, String postKey) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection(collection)
+        .where('post_key', isEqualTo: postKey)
+        .get();
+    return querySnapshot.docs.first;
+  }
+
   // Fetch all recipes
   Stream<QuerySnapshot> getRecipeStream() {
     final recipeStream = _recipes.snapshots();
@@ -37,10 +52,10 @@ class FirestoreService {
   // Fetch relevant recipe
   Stream<QuerySnapshot> getSearchedRecipeStream(String query) {
     final relevantRecipeStream = _recipes
-        .where('name', isGreaterThanOrEqualTo: query)
-        .where('category', isGreaterThanOrEqualTo: query)
-        .snapshots();
-    return relevantRecipeStream;
+        .orderBy('name')
+        .startAt([capitalizeFirstLetter(query)])
+        .endAt(['${capitalizeFirstLetter(query)}\uf8ff']); 
+    return relevantRecipeStream.snapshots();
   }
 
   // Insert Data
@@ -61,6 +76,7 @@ class FirestoreService {
         'time_to_cook': recipeForm.timeToCook,
         'meal_type': recipeForm.mealType,
         'post_key': documentID,
+        'user': await getCurrentUserID(),
       });
 
       await _recipeInfo.add({
@@ -71,6 +87,7 @@ class FirestoreService {
         'cautions': recipeForm.cautions, // Optional
         'calories': recipeForm.calories, // Optional
         'post_key': documentID,
+        'user': await getCurrentUserID(),
       });
 
       // Each Ingredient has its own attributes
@@ -80,7 +97,8 @@ class FirestoreService {
           'quantity': ingredient.quantity,
           'unit': ingredient.unit,
           'image': ingredient.image,
-          'post_key': documentID
+          'post_key': documentID,
+          'user': await getCurrentUserID(),
         });
       }
 
@@ -92,7 +110,8 @@ class FirestoreService {
             'label': nutrient.label,
             'quantity': nutrient.quantity,
             'unit': nutrient.unit,
-            'post_key': documentID
+            'post_key': documentID,
+            'user': await getCurrentUserID(),
           });
         }
       }

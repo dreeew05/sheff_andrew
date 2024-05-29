@@ -25,10 +25,10 @@ class _AddNutrientsDialogState extends State<AddNutrientsDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _labelController.dispose();
     _quantityController.dispose();
     _unitController.dispose();
+    super.dispose();
   }
 
   void clearForm() {

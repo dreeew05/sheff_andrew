@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sheff_andrew/screens/community_page/community_page.dart';
-import 'package:sheff_andrew/screens/community_page/anotherpage.dart';
 
 class CommunityNavigator extends StatefulWidget {
   const CommunityNavigator({super.key});
@@ -17,24 +16,10 @@ class CommunityNavigatorState extends State<CommunityNavigator> {
     return Navigator(
       key: communityNavigatorKey,
       onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/another':
-            return MaterialPageRoute(
-              builder: (context) => const AnotherPage(postKey: '',),
-            );
-          case '/':
-          default:
-            return MaterialPageRoute(
-              builder: (context) => const CommunityPage(),
-            );
-        }
+        return MaterialPageRoute(
+          builder: (context) => const CommunityPage(),
+        );
       },
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: CommunityNavigator(),
-  ));
 }
