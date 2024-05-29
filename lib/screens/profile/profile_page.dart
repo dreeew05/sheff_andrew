@@ -7,8 +7,55 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // For sign out
-Future<void> signOut() async {
+Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();
+}
+
+//Alert Dialogue for signing out
+Future<void> _signOutDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Sign out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Color(0xff006A4E),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.white),
+                )),
+          ),
+          TextButton(
+            onPressed: () {
+              _signOut();
+              Navigator.of(context).pop();
+            },
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 201, 200, 200),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Sign out',
+                  style: TextStyle(color: Colors.white),
+                )),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class ProfilePage extends StatefulWidget {
@@ -60,36 +107,66 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        backgroundColor: Color(0xff006A4E), // white or colored
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           GestureDetector(
-            onTap: () => signOut(),
+            onTap: () => _signOutDialog(context),
             child: Row(
               children: [
-                const Text("Sign out"),
+                const Text(
+                  "Sign out",
+                  style: TextStyle(color: Color(0xFFFFFFE0)),
+                ),
                 IconButton(
-                    onPressed: () => signOut(), icon: const Icon(Icons.logout)),
+                  onPressed: () => _signOutDialog(context),
+                  icon: const Icon(Icons.logout),
+                  color: Color(0xFFFFFFE0),
+                ),
               ],
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xff006A4E),
         onPressed: () {
           Navigator.pushNamed(context, '/addrecipe')
               .then((_) => setState(() {}));
         },
-        label: const Text('Add recipe'),
-        icon: const Icon(Icons.add),
+        label: const Text(
+          'Add recipe',
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(Icons.add, color: Colors.white),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Profile Page',
-              style: TextStyle(fontSize: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: const Color(0xffffffff), // white or colored
+                    padding: const EdgeInsets.all(10),
+                    child: Center(
+                      child: const Text(
+                        'Personal Recipes',
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors
+                                .black), // can't decide on what to color so left it here in case background color is changed
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 10),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _fetchUserRecipes(),
               builder: (context, snapshot) {
