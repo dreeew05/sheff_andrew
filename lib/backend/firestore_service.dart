@@ -2,12 +2,16 @@
   Author: Glen Andrew C. Bulaong
   Purpose of this file: All in One File for Firestore Service
 */
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
+
+String capitalizeFirstLetter(String text) {
+  if (text == null || text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+}
 
 class FirestoreService {
   // Collections
@@ -37,10 +41,10 @@ class FirestoreService {
   // Fetch relevant recipe
   Stream<QuerySnapshot> getSearchedRecipeStream(String query) {
     final relevantRecipeStream = _recipes
-        .where('name', isGreaterThanOrEqualTo: query)
-        .where('category', isGreaterThanOrEqualTo: query)
-        .snapshots();
-    return relevantRecipeStream;
+        .orderBy('name')
+        .startAt([capitalizeFirstLetter(query)])
+        .endAt(['${capitalizeFirstLetter(query)}\uf8ff']); 
+    return relevantRecipeStream.snapshots();
   }
 
   // Insert Data
