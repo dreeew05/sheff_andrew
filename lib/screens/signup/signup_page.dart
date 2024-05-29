@@ -154,46 +154,34 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _signUp,
-                    child: Text('Sign Up'),
+                    child:
+                        Text('Sign Up', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      minimumSize: Size(double.infinity, 50),
+                      backgroundColor: Color(0xff006A4E),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text('Or Sign in With'),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Image.asset('assets/google_icon.png'),
-                        iconSize: 40,
-                        onPressed: () {
-                          // Handle Google sign in
-                        },
-                      ),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Image.asset('assets/facebook_icon.png'),
-                        iconSize: 40,
-                        onPressed: () {
-                          // Handle Facebook sign in
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Go back to sign in page
-                    },
-                    child: Text(
-                      'Already a member? Sign In',
-                      style: TextStyle(color: Colors.orange),
-                    ),
-                  ),
+                      onPressed: () {
+                        Navigator.pop(context); // Go back to sign in page
+                      },
+                      child: Text.rich(
+                        TextSpan(
+                          text: "Already a member? ",
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: 'Sign In',
+                              style: TextStyle(
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
                 ],
               ),
             ),
