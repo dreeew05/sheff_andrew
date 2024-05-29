@@ -25,9 +25,9 @@ class FeaturedRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final String postKey = recipe['post_key'];
     AppPainter appPainter = AppPainter();
     return Container(
+      height: 275,
       width: 175,
       margin: const EdgeInsets.only(left: 10, right: 10),
       child: Stack(
@@ -44,6 +44,7 @@ class FeaturedRecipe extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       left: 15, right: 15, top: 10, bottom: 10),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextButton(
                         onPressed: () {
@@ -53,16 +54,18 @@ class FeaturedRecipe extends StatelessWidget {
                                   builder: (context) =>
                                       RecipeViewPage(postKey: postKey)));
                         },
-                        child: Text(
-                          // recipe['name'] as String,
-                          name,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: GoogleFonts.poppins(
-                            color: appPainter.getCardTextColor(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            name,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: GoogleFonts.poppins(
+                              color: appPainter.getCardTextColor(),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -76,18 +79,12 @@ class FeaturedRecipe extends StatelessWidget {
                             )),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 5)),
-                      Row(
-                        children: [
-                          Text(
-                              // recipe['time_to_cook'].toString(),
-                              timeToCook,
-                              style: GoogleFonts.poppins(
-                                color: appPainter.getCardTextColor(),
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ],
-                      )
+                      Text('$timeToCook Mins',
+                          style: GoogleFonts.poppins(
+                            color: appPainter.getCardTextColor(),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ],
                   ),
                 )),
@@ -106,7 +103,6 @@ class FeaturedRecipe extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 100,
                         backgroundImage: NetworkImage(
-                          // recipe['image'] as String
                           image,
                         ) as ImageProvider<Object>?,
                       ),
