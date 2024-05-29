@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// For sign out
+Future<void> signOut() async {
+  await FirebaseAuth.instance.signOut();
+}
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -36,11 +41,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _deleteRecipe(BuildContext context, String recipeId) async {
     try {
-      await FirebaseFirestore.instance.collection('recipes').doc(recipeId).delete();
+      await FirebaseFirestore.instance
+          .collection('recipes')
+          .doc(recipeId)
+          .delete();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Recipe deleted successfully')),
       );
-      setState(() {});  // Trigger a rebuild to refresh the list
+      setState(() {}); // Trigger a rebuild to refresh the list
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete the recipe: $e')),
@@ -53,10 +61,23 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        actions: [
+          GestureDetector(
+            onTap: () => signOut(),
+            child: Row(
+              children: [
+                const Text("Sign out"),
+                IconButton(
+                    onPressed: () => signOut(), icon: const Icon(Icons.logout)),
+              ],
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/addrecipe').then((_) => setState(() {}));
+          Navigator.pushNamed(context, '/addrecipe')
+              .then((_) => setState(() {}));
         },
         label: const Text('Add recipe'),
         icon: const Icon(Icons.add),
@@ -93,9 +114,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Category: ${recipe['category'] ?? 'No category'}'),
-                                Text('Meal Type: ${recipe['meal_type'] ?? 'No meal type'}'),
-                                Text('Time to Cook: ${recipe['time_to_cook'] ?? 'No time to cook'}'),
+                                Text(
+                                    'Category: ${recipe['category'] ?? 'No category'}'),
+                                Text(
+                                    'Meal Type: ${recipe['meal_type'] ?? 'No meal type'}'),
+                                Text(
+                                    'Time to Cook: ${recipe['time_to_cook'] ?? 'No time to cook'}'),
                               ],
                             ),
                             trailing: IconButton(
@@ -106,7 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: const Text('Delete Recipe'),
-                                      content: const Text('Are you sure you want to delete this recipe?'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this recipe?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () {
