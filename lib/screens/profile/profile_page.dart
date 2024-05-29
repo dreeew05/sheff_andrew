@@ -25,32 +25,14 @@ Future<void> _signOutDialog(BuildContext context) async {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Color(0xff006A4E),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.white),
-                )),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               _signOut();
               Navigator.of(context).pop();
             },
-            child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 201, 200, 200),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Text(
-                  'Sign out',
-                  style: TextStyle(color: Colors.white),
-                )),
+            child: const Text('Sign out'),
           ),
         ],
       );
@@ -107,66 +89,37 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff006A4E), // white or colored
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('Profile'),
         actions: [
           GestureDetector(
             onTap: () => _signOutDialog(context),
             child: Row(
               children: [
-                const Text(
-                  "Sign out",
-                  style: TextStyle(color: Color(0xFFFFFFE0)),
-                ),
+                const Text("Sign out"),
                 IconButton(
-                  onPressed: () => _signOutDialog(context),
-                  icon: const Icon(Icons.logout),
-                  color: Color(0xFFFFFFE0),
-                ),
+                    onPressed: () => _signOutDialog(context),
+                    icon: const Icon(Icons.logout)),
               ],
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Color(0xff006A4E),
         onPressed: () {
           Navigator.pushNamed(context, '/addrecipe')
               .then((_) => setState(() {}));
         },
-        label: const Text(
-          'Add recipe',
-          style: TextStyle(color: Colors.white),
-        ),
-        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Add recipe'),
+        icon: const Icon(Icons.add),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: const Color(0xffffffff), // white or colored
-                    padding: const EdgeInsets.all(10),
-                    child: Center(
-                      child: const Text(
-                        'Personal Recipes',
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Colors
-                                .black), // can't decide on what to color so left it here in case background color is changed
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            const Text(
+              'Profile Page',
+              style: TextStyle(fontSize: 24),
             ),
-            SizedBox(height: 10),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _fetchUserRecipes(),
               builder: (context, snapshot) {
