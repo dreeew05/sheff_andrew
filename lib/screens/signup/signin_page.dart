@@ -77,52 +77,31 @@ class SignInPage extends StatelessWidget {
                   onPressed: () => _signIn(context),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
+                    backgroundColor: Color(0xff006A4E),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text('Sign In'),
+                  child: Text('Sign In', style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Or Sign in With'),
-                    ),
-                    Expanded(child: Divider()),
-                  ],
-                ),
-                SizedBox(height: 16),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     IconButton(
-                //       icon: Image.asset(
-                //           'assets/google_icon.png'), // Add Google icon to your assets
-                //       iconSize: 40,
-                //       onPressed: () {
-                //         // Handle Google sign in
-                //       },
-                //     ),
-                //     SizedBox(width: 32),
-                //     IconButton(
-                //       icon: Image.asset('assets/facebook_icon.png'),
-                //       iconSize: 40,
-                //       onPressed: () {
-                //         // Handle Facebook sign in
-                //       },
-                //     ),
-                //   ],
-                // ),
-                SizedBox(height: 16),
                 TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  },
-                  child: Text("Don't have an account? Sign up"),
-                ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/signup');
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Don't have an account? ",
+                        style: TextStyle(color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: TextStyle(
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
               ],
             ),
           ),
