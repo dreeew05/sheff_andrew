@@ -17,8 +17,8 @@ class _GenericLabelDialogState extends State<GenericLabelDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _labelController.dispose();
+    super.dispose();
   }
 
   @override

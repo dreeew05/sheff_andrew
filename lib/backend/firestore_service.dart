@@ -32,6 +32,17 @@ class FirestoreService {
     return user?.uid;
   }
 
+  // Fetch specific document given the post_key
+  Future<DocumentSnapshot<Map<String, dynamic>>> fetchDocument(
+      String collection, String postKey) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection(collection)
+        .where('post_key', isEqualTo: postKey)
+        .get();
+    return querySnapshot.docs.first;
+  }
+
   // Fetch all recipes
   Stream<QuerySnapshot> getRecipeStream() {
     final recipeStream = _recipes.snapshots();
@@ -65,6 +76,7 @@ class FirestoreService {
         'time_to_cook': recipeForm.timeToCook,
         'meal_type': recipeForm.mealType,
         'post_key': documentID,
+        'user': await getCurrentUserID(),
       });
 
       await _recipeInfo.add({
@@ -75,6 +87,7 @@ class FirestoreService {
         'cautions': recipeForm.cautions, // Optional
         'calories': recipeForm.calories, // Optional
         'post_key': documentID,
+        'user': await getCurrentUserID(),
       });
 
       // Each Ingredient has its own attributes
@@ -84,7 +97,8 @@ class FirestoreService {
           'quantity': ingredient.quantity,
           'unit': ingredient.unit,
           'image': ingredient.image,
-          'post_key': documentID
+          'post_key': documentID,
+          'user': await getCurrentUserID(),
         });
       }
 
@@ -96,7 +110,8 @@ class FirestoreService {
             'label': nutrient.label,
             'quantity': nutrient.quantity,
             'unit': nutrient.unit,
-            'post_key': documentID
+            'post_key': documentID,
+            'user': await getCurrentUserID(),
           });
         }
       }

@@ -16,8 +16,8 @@ class _AddStepDialogState extends State<AddStepDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _stepController.dispose();
+    super.dispose();
   }
 
   @override

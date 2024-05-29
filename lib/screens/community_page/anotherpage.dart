@@ -99,7 +99,8 @@ class ProcedureTab extends StatelessWidget {
         }
 
         final recipeInfo = snapshot.data!.docs.first;
-        final steps = List<String>.from(recipeInfo['steps'] as List<dynamic>? ?? []);
+        final steps =
+            List<String>.from(recipeInfo['steps'] as List<dynamic>? ?? []);
 
         return ListView.builder(
           itemCount: steps.length,
