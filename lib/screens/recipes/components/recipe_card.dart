@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../recipe_view_page.dart';
+import 'package:sheff_andrew/backend/firestore_service.dart';
 
-class RecipeCard extends StatelessWidget {
+class RecipeCard extends StatefulWidget {
   const RecipeCard({
     super.key,
     required this.recipe,
@@ -10,12 +11,18 @@ class RecipeCard extends StatelessWidget {
   final Map<String, dynamic> recipe;
 
   @override
+  State<RecipeCard> createState() => _RecipeCardState();
+}
+
+class _RecipeCardState extends State<RecipeCard> {
+  
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(8.0),
       clipBehavior: Clip.antiAlias,
       child: Ink.image(
-          image: NetworkImage(recipe['image']),
+          image: NetworkImage(widget.recipe['image']),
         fit: BoxFit.cover,
         child: InkWell(
           onTap: () {
@@ -24,7 +31,7 @@ class RecipeCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    RecipeViewPage(postKey: recipe['post_key'])
+                    RecipeViewPage(postKey: widget.recipe['post_key'])
                 )
               );
           },
@@ -35,7 +42,7 @@ class RecipeCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  recipe['name'],
+                  widget.recipe['name'],
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
@@ -43,16 +50,42 @@ class RecipeCard extends StatelessWidget {
                   ),
                 ),
                 //author/chef, remove const if done
-                const Text("By Chef: Gwapo", 
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                )),
+                RecipeUserNameWidget(userKey: widget.recipe['user']),
               ],
           ),
-        ),                          ),
+        ),                          
       ),
+      ),
+    );
+  }
+}
+
+
+class RecipeUserNameWidget extends StatelessWidget {
+  final String? userKey;
+  final FirestoreService firestoreService = FirestoreService();
+
+  RecipeUserNameWidget({required this.userKey});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String?>(
+      future: firestoreService.getRecipeUserName(userKey),
+      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text('');
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return const Text('User not found');
+        } else {
+          return Text('By Chef: ${snapshot.data}', 
+            style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12.0,
+            fontWeight: FontWeight.bold,));
+        }
+      },
     );
   }
 }
