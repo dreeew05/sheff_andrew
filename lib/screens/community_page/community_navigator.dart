@@ -20,7 +20,7 @@ class CommunityNavigatorState extends State<CommunityNavigator> {
         switch (settings.name) {
           case '/another':
             return MaterialPageRoute(
-              builder: (context) => const AnotherPage(),
+              builder: (context) => const AnotherPage(postKey: '',),
             );
           case '/':
           default:
