@@ -51,15 +51,16 @@ class CommunityPage extends StatelessWidget {
                   }
 
                   return ListView(
+                    padding: const EdgeInsets.all(8.0),
                     children: snapshot.data!.docs.map((doc) {
                       return FutureBuilder(
                         future: fetchPostData(doc['post_key']),
                         builder: (context, AsyncSnapshot<Map<String, dynamic>?> postSnapshot) {
                           if (postSnapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const Center(child: CircularProgressIndicator());
                           }
                           if (!postSnapshot.hasData || postSnapshot.data == null) {
-                            return const Text('Post data not available');
+                            return const Center(child: Text('Post data not available'));
                           }
 
                           final postData = postSnapshot.data!;
@@ -67,33 +68,62 @@ class CommunityPage extends StatelessWidget {
                             future: fetchUserName(postData['user']),
                             builder: (context, AsyncSnapshot<String?> userSnapshot) {
                               if (userSnapshot.connectionState == ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
+                                return const Center(child: CircularProgressIndicator());
                               }
                               if (!userSnapshot.hasData || userSnapshot.data == null) {
-                                return const Text('User data not available');
+                                return const Center(child: Text('User data not available'));
                               }
 
                               final userName = userSnapshot.data!;
-                              return ListTile(
-                                title: Text(doc['name']),
-                                subtitle: Text('${doc['meal_type']} - ${doc['time_to_cook']} mins'),
-                                leading: Image.network(doc['image']),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(doc['category']),
-                                    Text('Posted by: $userName'),
-                                    Text('Date: ${postData['date_posted']}'),
-                                  ],
+                              return Card(
+                                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(doc['name'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                                        subtitle: Text('${doc['meal_type']} - ${doc['time_to_cook']} mins'),
+                                        leading: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          child: Image.network(
+                                            doc['image'],
+                                            width: 60,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        doc['category'],
+                                        style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        'Posted by: $userName',
+                                        style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AnotherPage(postKey: doc['post_key']),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text('View Post'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AnotherPage(postKey: doc['post_key']),
-                                    ),
-                                  );
-                                },
                               );
                             },
                           );
