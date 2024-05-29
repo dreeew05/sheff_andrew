@@ -15,6 +15,16 @@ class CommunityPage extends StatelessWidget {
     return null;
   }
 
+  Future<String?> fetchUserName(String userKey) async {
+    // Fetch the user data from the 'users' collection based on the userKey
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(userKey).get();
+
+    if (userSnapshot.exists) {
+      return userSnapshot['name'];
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,24 +63,37 @@ class CommunityPage extends StatelessWidget {
                           }
 
                           final postData = postSnapshot.data!;
-                          return ListTile(
-                            title: Text(doc['name']),
-                            subtitle: Text('${doc['meal_type']} - ${doc['time_to_cook']} mins'),
-                            leading: Image.network(doc['image']),
-                            trailing: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(doc['category']),
-                                Text('Posted by: ${postData['user']}'),
-                                Text('Date: ${postData['date_posted']}'),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AnotherPage(postKey: doc['post_key']),
+                          return FutureBuilder(
+                            future: fetchUserName(postData['user']),
+                            builder: (context, AsyncSnapshot<String?> userSnapshot) {
+                              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (!userSnapshot.hasData || userSnapshot.data == null) {
+                                return const Text('User data not available');
+                              }
+
+                              final userName = userSnapshot.data!;
+                              return ListTile(
+                                title: Text(doc['name']),
+                                subtitle: Text('${doc['meal_type']} - ${doc['time_to_cook']} mins'),
+                                leading: Image.network(doc['image']),
+                                trailing: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(doc['category']),
+                                    Text('Posted by: $userName'),
+                                    Text('Date: ${postData['date_posted']}'),
+                                  ],
                                 ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AnotherPage(postKey: doc['post_key']),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           );
