@@ -6,9 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   Future<List<Map<String, dynamic>>> _fetchUserRecipes() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -33,8 +38,9 @@ class ProfilePage extends StatelessWidget {
     try {
       await FirebaseFirestore.instance.collection('recipes').doc(recipeId).delete();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Recipe deleted successfully')),
+        const SnackBar(content: Text('Recipe deleted successfully')),
       );
+      setState(() {});  // Trigger a rebuild to refresh the list
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete the recipe: $e')),
@@ -50,7 +56,7 @@ class ProfilePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/addrecipe');
+          Navigator.pushNamed(context, '/addrecipe').then((_) => setState(() {}));
         },
         label: const Text('Add recipe'),
         icon: const Icon(Icons.add),
@@ -93,26 +99,26 @@ class ProfilePage extends StatelessWidget {
                               ],
                             ),
                             trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
+                              icon: const Icon(Icons.delete, color: Colors.red),
                               onPressed: () async {
                                 bool? confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('Delete Recipe'),
-                                      content: Text('Are you sure you want to delete this recipe?'),
+                                      title: const Text('Delete Recipe'),
+                                      content: const Text('Are you sure you want to delete this recipe?'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop(false);
                                           },
-                                          child: Text('Cancel'),
+                                          child: const Text('Cancel'),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop(true);
                                           },
-                                          child: Text('Delete'),
+                                          child: const Text('Delete'),
                                         ),
                                       ],
                                     );
