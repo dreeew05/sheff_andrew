@@ -17,12 +17,13 @@ class RelevantRecipeCard extends StatelessWidget {
   final String label;
   final String image;
   final double totalTime;
-  const RelevantRecipeCard(
-      {super.key,
-      required this.index,
-      required this.label,
-      required this.image,
-      required this.totalTime});
+  const RelevantRecipeCard({
+    super.key,
+    required this.index,
+    required this.label,
+    required this.image,
+    required this.totalTime,
+  });
 
   @override
   Widget build(BuildContext context) {
