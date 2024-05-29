@@ -4,6 +4,7 @@
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
@@ -17,6 +18,8 @@ class FirestoreService {
   // Collections
   final CollectionReference _post =
       FirebaseFirestore.instance.collection('posts');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   final CollectionReference _recipes =
       FirebaseFirestore.instance.collection('recipes');
   final CollectionReference _recipeInfo =
@@ -30,6 +33,21 @@ class FirestoreService {
   Future<String?> getCurrentUserID() async {
     final user = FirebaseAuth.instance.currentUser;
     return user?.uid;
+  }
+
+  Future<String?> getRecipeUserName(String? userKey) async {
+    try {
+      // Create a query to find the document with the specified userKey
+      QuerySnapshot querySnapshot = await _users.where('userKey', isEqualTo: userKey).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot userDoc = querySnapshot.docs.first;
+        return userDoc['name'] as String?;
+      } else {
+        return 'Null';
+      }
+    } catch (e) {
+      return 'Null';
+    }
   }
 
   // Fetch specific document given the post_key
