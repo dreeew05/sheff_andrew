@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sheff_andrew/app_navigator.dart';
 import 'package:sheff_andrew/providers/generative_search_provider.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
+import 'package:sheff_andrew/providers/tab_controller_provider.dart';
 import 'package:sheff_andrew/providers/user_provider.dart';
 import 'package:sheff_andrew/screens/signup/signin_page.dart';
 import 'package:sheff_andrew/screens/signup/signup_page.dart';
@@ -15,10 +16,11 @@ void main() async {
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: ((context) => UserProvider())),
       ChangeNotifierProvider(create: ((context) => ThemeNotifier())),
       ChangeNotifierProvider(create: ((context) => RecipeFormProvider())),
       ChangeNotifierProvider(create: ((context) => GenerativeSearchProvider())),
-      ChangeNotifierProvider(create: ((context) => UserProvider()))
+      ChangeNotifierProvider(create: ((context) => TabControllerProvider()))
     ],
     child: const MyApp(),
   ));
