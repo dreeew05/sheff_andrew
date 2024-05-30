@@ -47,7 +47,6 @@ class _RecipesPageState extends State<RecipesPage> {
                 });
               },
             ),
-            const SizedBox(height: 10),
             Expanded(
                 child: StreamBuilder<QuerySnapshot>(
               stream: _searchQuery.isEmpty
@@ -68,23 +67,27 @@ class _RecipesPageState extends State<RecipesPage> {
                 } else if (snapshot.hasData) {
                   final List recipeList = snapshot.data!.docs;
                   return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                     ),
                     itemCount: recipeList.length,
                     itemBuilder: (context, index) {
-                      final recipe = recipeList[index].data() as Map<String, dynamic>;
+                      final recipe =
+                          recipeList[index].data() as Map<String, dynamic>;
                       return RecipeCard(recipe: recipe);
                     },
                   );
-
                 } else {
                   return Center(
                     child: Text(
-                      'No data',
-                      style: GoogleFonts.poppins(),
+                      'No recipes',
+                      style: GoogleFonts.poppins(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   );
                 }
