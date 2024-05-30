@@ -136,7 +136,7 @@ class _RecipeDetailsState extends State<RecipeDetails> {
                       color: Color.fromARGB(255, 214, 44, 32),
                       width: 1.0,
                     )),
-                    labelText: 'Time to Cook (in minutes)',
+                    labelText: ' (in minutes)',
                     labelStyle: GoogleFonts.poppins(),
                     icon: const Icon(Icons.alarm),
                   ),

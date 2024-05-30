@@ -9,7 +9,7 @@ import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/models/recipe_form_model.dart';
 
 String capitalizeFirstLetter(String text) {
-  if (text == null || text.isEmpty) return text;
+  if (text.isEmpty) return text;
   return text[0].toUpperCase() + text.substring(1);
 }
 
@@ -17,6 +17,8 @@ class FirestoreService {
   // Collections
   final CollectionReference _post =
       FirebaseFirestore.instance.collection('posts');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
   final CollectionReference _recipes =
       FirebaseFirestore.instance.collection('recipes');
   final CollectionReference _recipeInfo =
@@ -32,6 +34,29 @@ class FirestoreService {
     return user?.uid;
   }
 
+  Future<String?> getRecipeUserName(String? userKey) async {
+    try {
+      // Create a query to find the document with the specified userKey
+      QuerySnapshot querySnapshot =
+          await _users.where('userKey', isEqualTo: userKey).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot userDoc = querySnapshot.docs.first;
+        return userDoc['name'] as String?;
+      } else {
+        return 'Null';
+      }
+    } catch (e) {
+      return 'Null';
+    }
+  }
+
+  // Fetch user details
+  Future<DocumentSnapshot> fetchUserDetails() async {
+    DocumentSnapshot documentSnapshot =
+        await _users.doc(await getCurrentUserID()).get();
+    return documentSnapshot;
+  }
+
   // Fetch specific document given the post_key
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchDocument(
       String collection, String postKey) async {
@@ -41,6 +66,48 @@ class FirestoreService {
         .where('post_key', isEqualTo: postKey)
         .get();
     return querySnapshot.docs.first;
+  }
+
+  // Delete Recipe
+  Future<void> deleteRecipe(String postKey) async {
+    QuerySnapshot recipeSnapshots =
+        await _recipes.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot recipeInfoSnapshots =
+        await _recipeInfo.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot nutrientsSnapshots =
+        await _nutrientsInfo.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot ingredientsSnapshots =
+        await _ingredientsInfo.where('post_key', isEqualTo: postKey).get();
+
+    // Delete the posts from Recipes Collection
+    for (QueryDocumentSnapshot doc in recipeSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts from RecipeInfo Collection
+    for (QueryDocumentSnapshot doc in recipeInfoSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts Nutrients Collection
+    for (QueryDocumentSnapshot doc in nutrientsSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts Ingredients Collection
+    for (QueryDocumentSnapshot doc in ingredientsSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the post from Posts Collection
+    await _post.doc(postKey).delete();
+  }
+
+  // Fetch all recipes from the user
+  Stream<QuerySnapshot> fetchRecipesByCurrentUser(String userKey) {
+    final allRecipesByUserStream =
+        _recipes.where('user', isEqualTo: userKey).snapshots();
+    return allRecipesByUserStream;
   }
 
   // Fetch all recipes
@@ -53,8 +120,8 @@ class FirestoreService {
   Stream<QuerySnapshot> getSearchedRecipeStream(String query) {
     final relevantRecipeStream = _recipes
         .orderBy('name')
-        .startAt([capitalizeFirstLetter(query)])
-        .endAt(['${capitalizeFirstLetter(query)}\uf8ff']); 
+        .startAt([capitalizeFirstLetter(query)]).endAt(
+            ['${capitalizeFirstLetter(query)}\uf8ff']);
     return relevantRecipeStream.snapshots();
   }
 

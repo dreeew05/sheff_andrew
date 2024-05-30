@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sheff_andrew/screens/recipes/recipe_view_page.dart';
+import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
