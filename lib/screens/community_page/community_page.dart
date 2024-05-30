@@ -5,26 +5,20 @@ import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
 
-  Future<Map<String, dynamic>?> fetchPostData(String postKey) async {
-    // Fetch the post data from the 'posts' collection based on the post_key
-    DocumentSnapshot postSnapshot =
-        await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
-
-    if (postSnapshot.exists) {
-      return postSnapshot.data() as Map<String, dynamic>;
-    }
-    return null;
+  Stream<Map<String, dynamic>?> fetchPostData(String postKey) {
+    return FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postKey)
+        .snapshots()
+        .map((snapshot) => snapshot.data());
   }
 
-  Future<String?> fetchUserName(String userKey) async {
-    // Fetch the user data from the 'users' collection based on the userKey
-    DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userKey).get();
-
-    if (userSnapshot.exists) {
-      return userSnapshot['name'];
-    }
-    return null;
+  Stream<String?> fetchUserName(String userKey) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userKey)
+        .snapshots()
+        .map((snapshot) => snapshot.data()?['name']);
   }
 
   @override
@@ -37,10 +31,6 @@ class CommunityPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Community Info',
-              style: TextStyle(fontSize: 24),
-            ),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -57,8 +47,8 @@ class CommunityPage extends StatelessWidget {
                   return ListView(
                     padding: const EdgeInsets.all(8.0),
                     children: snapshot.data!.docs.map((doc) {
-                      return FutureBuilder(
-                        future: fetchPostData(doc['post_key']),
+                      return StreamBuilder(
+                        stream: fetchPostData(doc['post_key']),
                         builder: (context,
                             AsyncSnapshot<Map<String, dynamic>?> postSnapshot) {
                           if (postSnapshot.connectionState ==
@@ -73,8 +63,8 @@ class CommunityPage extends StatelessWidget {
                           }
 
                           final postData = postSnapshot.data!;
-                          return FutureBuilder(
-                            future: fetchUserName(postData['user']),
+                          return StreamBuilder(
+                            stream: fetchUserName(postData['user']),
                             builder:
                                 (context, AsyncSnapshot<String?> userSnapshot) {
                               if (userSnapshot.connectionState ==
@@ -98,38 +88,37 @@ class CommunityPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Text(doc['name'],
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18)),
-                                        subtitle: Text(
-                                            '${doc['meal_type']} - ${doc['time_to_cook']} mins'),
-                                        leading: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.network(
-                                            doc['image'],
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.cover,
-                                          ),
+                                      Text(doc['name'],
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18)),
+                                      const SizedBox(height: 10),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          doc['image'],
+                                          width: double.infinity,
+                                          height: 200,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                       const SizedBox(height: 10),
                                       Text(
+                                        '${doc['meal_type']} - ${doc['time_to_cook']} mins',
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0)),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
                                         doc['category'],
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 0, 0, 0)),
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0)),
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
                                         'Posted by: $userName',
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 0, 0, 0)),
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0)),
                                       ),
                                       const SizedBox(height: 10),
                                       Align(
