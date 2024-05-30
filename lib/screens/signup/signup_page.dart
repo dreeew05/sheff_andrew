@@ -34,6 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
             'name': _nameController.text.trim(),
             'email': _emailController.text.trim(),
             'userKey': newUser.user!.uid,
+            'bookmarks': [],
           });
 
           // Navigate to the next page or show a success message
@@ -153,16 +154,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: _signUp,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      onPressed: _signUp,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
-                    ),
-                    child:
-                        Text('Sign Up')
-                  ),
+                      child: Text('Sign Up')),
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context); // Go back to sign in page
