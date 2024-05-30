@@ -37,7 +37,14 @@ class RecipeViewPage extends StatelessWidget {
                         snapshot.data!.data()!;
                     final image = recipeData['image'];
                     final name = recipeData['name'];
-                    return BasicRecipeDetails(image: image, name: name);
+                    final timeToCook = recipeData['time_to_cook'].toString();
+                    final postKey = recipeData['post_key'];
+                    return BasicRecipeDetails(
+                      image: image,
+                      name: name,
+                      timeToCook: timeToCook,
+                      postKey: postKey,
+                    );
                   }
                 },
               ),
