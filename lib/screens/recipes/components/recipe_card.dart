@@ -39,61 +39,62 @@ class _RecipeCardState extends State<RecipeCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: const EdgeInsets.all(8.0),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          children: [
-            Ink.image(
-              image: NetworkImage(_imageLink),
-              fit: BoxFit.cover,
-              child: InkWell(
-                onTap: () {
-                  // Add your onTap logic here
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RecipeViewPage(
-                              postKey: widget.recipe['post_key'])));
-                },
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                RecipeViewPage(postKey: widget.recipe['post_key']),
+          ),
+        );
+      },
+      child: Card(
+          margin: const EdgeInsets.all(8.0),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              Ink.image(
+                image: NetworkImage(_imageLink),
+                fit: BoxFit.cover,
               ),
-            ),
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.8),
-                    ],
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.8),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.recipe['name'],
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  //author/chef, remove const if done
-                  RecipeUserNameWidget(userKey: widget.recipe['user']),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.recipe['name'],
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    //author/chef, remove const if done
+                    RecipeUserNameWidget(userKey: widget.recipe['user']),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 }
 
