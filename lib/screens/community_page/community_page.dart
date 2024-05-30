@@ -223,7 +223,7 @@ class _CommunityPageState extends State<CommunityPage> {
                     label: Text(category),
                   ),
                 );
-              }).toList(),
+              }).toList(), 
             ),
           );
         }
