@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -6,6 +7,11 @@ class SignInPage extends StatelessWidget {
 
   void _signIn(BuildContext context) async {
     try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
       // Navigate to the recipe carousel page upon successful sign-in
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Sign in successful!')));
