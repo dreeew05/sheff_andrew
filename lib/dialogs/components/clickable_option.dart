@@ -66,6 +66,7 @@ class ClickableOption extends StatelessWidget {
           Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           textStyle: GoogleFonts.poppins(fontSize: 16),
           shape: getOrientation(),
         ),
