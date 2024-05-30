@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../recipe_view_page.dart';
+import '../../recipe_view/recipe_view_page.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
 
 class RecipeCard extends StatefulWidget {

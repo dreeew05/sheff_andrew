@@ -6,8 +6,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
-import 'package:sheff_andrew/screens/recipes/components/basic_recipe_details.dart';
-import 'package:sheff_andrew/screens/recipes/components/recipe_tab_view.dart';
+import 'package:sheff_andrew/screens/recipe_view/components/basic_recipe_details.dart';
+import 'package:sheff_andrew/screens/recipe_view/components/recipe_tab_view.dart';
 
 class RecipeViewPage extends StatelessWidget {
   final String postKey;
