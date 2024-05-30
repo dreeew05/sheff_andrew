@@ -14,7 +14,7 @@ class SignInPage extends StatelessWidget {
       );
       // Navigate to the recipe carousel page upon successful sign-in
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Sign in successful!')));
+          .showSnackBar(const SnackBar(content: Text('Sign in successful!')));
       Navigator.pushReplacementNamed(context, '/');
     } catch (e) {
       ScaffoldMessenger.of(context)
@@ -32,16 +32,16 @@ class SignInPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
+                const Text(
                   'Hello,',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Welcome Back!',
                   style: TextStyle(fontSize: 20),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -51,7 +51,7 @@ class SignInPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
@@ -62,36 +62,34 @@ class SignInPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
                       // Handle forgot password
                     },
-                    child: Text('Forgot Password?'),
+                    child: const Text('Forgot Password?'),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => _signIn(context),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50),
-                    backgroundColor: Color(0xff006A4E),
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text('Sign In', style: TextStyle(color: Colors.white)),
+                  child: Text('Sign In', style: TextStyle(color: Theme.of(context).primaryColor)),
                 ),
                 TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/signup');
                     },
-                    child: Text.rich(
+                    child: const Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
-                        style: TextStyle(color: Colors.black),
                         children: [
                           TextSpan(
                             text: 'Sign up',

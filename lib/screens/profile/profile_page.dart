@@ -4,18 +4,13 @@
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
 import 'package:sheff_andrew/providers/user_provider.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
-
-// For sign out
-Future<void> signOut() async {
-  await FirebaseAuth.instance.signOut();
-}
+import 'theming.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -26,6 +21,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final FirestoreService firestoreService = FirestoreService();
+  double? scrolledUnderElevation = 10.0;
+  Color selectedColor = Colors.white;
+
   @override
   Widget build(BuildContext context) {
     final userKey = context.watch<UserProvider>().userKey;
@@ -38,6 +36,32 @@ class _ProfilePageState extends State<ProfilePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        scrolledUnderElevation: scrolledUnderElevation,
+        shadowColor: Theme.of(context).colorScheme.shadow,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              switch (result) {
+                case 'choose_theme':
+                  chooseTheme(context);
+                  break;
+                case 'sign_out':
+                  signOut();
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'choose_theme',
+                child: Text('Choose Theme'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'sign_out',
+                child: Text('Sign Out'),
+              ),
+            ],
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
