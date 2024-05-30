@@ -5,6 +5,8 @@ class SignInPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  SignInPage({super.key});
+
   void _signIn(BuildContext context) async {
     try {
       UserCredential userCredential =

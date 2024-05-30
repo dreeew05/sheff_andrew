@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
