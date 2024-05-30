@@ -134,8 +134,6 @@ class RecipeFormState extends State<RecipeForm> {
                     child: ElevatedButton(
                       onPressed: details.onStepCancel,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: appPainter.getPrimaryWhite(),
-                        foregroundColor: appPainter.getPrimaryLavender(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
@@ -158,11 +156,6 @@ class RecipeFormState extends State<RecipeForm> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: appPainter.getPrimaryLavender(),
-                      foregroundColor: appPainter.getPrimaryWhite(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
                     ),
                     child: Text(
                       isLastStep ? 'Submit' : 'Next',
