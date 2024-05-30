@@ -68,7 +68,10 @@ class _ProfilePageState extends State<ProfilePage> {
           Navigator.pushNamed(context, '/addrecipe')
               .then((_) => setState(() {}));
         },
-        label: const Text('Add recipe'),
+        label: Text(
+          'Add recipe',
+          style: GoogleFonts.poppins(),
+        ),
         icon: const Icon(Icons.add),
       ),
       body: Padding(
