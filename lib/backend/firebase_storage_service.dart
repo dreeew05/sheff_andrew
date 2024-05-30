@@ -32,7 +32,7 @@ class FirebaseStorageService {
 
     // Upload the file to the bucket
     try {
-      await imagesRef.putFile(File(image!.path));
+      await imagesRef.putFile(File(image.path));
       String downloadURL = await imagesRef.getDownloadURL();
       return downloadURL;
     } catch (e) {

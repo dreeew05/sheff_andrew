@@ -65,8 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/addrecipe')
-              .then((_) => setState(() {}));
+          Navigator.pushNamed(context, '/addrecipe');
         },
         label: Text(
           'Add recipe',
