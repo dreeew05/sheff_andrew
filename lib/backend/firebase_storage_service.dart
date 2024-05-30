@@ -6,21 +6,17 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sheff_andrew/common/utils/constants.dart';
 import 'package:uuid/uuid.dart';
 
-const String defaultRecipeImageLink =
-    'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/recipes%2Frecipe-default-image.png?alt=media&token=ac225653-981f-46f8-b028-12533e0e89bc';
-
-const String defaultIngredientImageLink =
-    'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/ingredients%2Fdefault-ingredient-image.png?alt=media&token=520960ad-ee08-410e-b98a-3818f61122d9';
-
 class FirebaseStorageService {
+  final Constants constants = Constants();
   Future<String> uploadImageAngGetLink(File? image, String imageFolder) async {
     String defaultImageLink;
     if (imageFolder == 'recipes') {
-      defaultImageLink = defaultRecipeImageLink;
+      defaultImageLink = constants.defaultRecipeImageLink;
     } else {
-      defaultImageLink = defaultIngredientImageLink;
+      defaultImageLink = constants.defaultIngredientImageLink;
     }
 
     // Guard clause if file is null
