@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 
 class CommunityPage extends StatefulWidget {
@@ -79,9 +78,6 @@ class _CommunityPageState extends State<CommunityPage> {
                           }
 
                           final postData = postSnapshot.data!.data() as Map<String, dynamic>;
-                          Timestamp datePosted = postData['date_posted'] as Timestamp;
-                          DateTime date = datePosted.toDate();
-                          String formattedDate = DateFormat('MMMM dd, yyyy').format(date);
 
                           return StreamBuilder<DocumentSnapshot>(
                             stream: FirebaseFirestore.instance.collection('users').doc(postData['user']).snapshots(),
@@ -102,55 +98,35 @@ class _CommunityPageState extends State<CommunityPage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            userName,
+                                      ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Text(doc['name'],
                                             style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18)),
+                                        subtitle: Text(
+                                            '${doc['meal_type']} - ${doc['time_to_cook']} mins'),
+                                        leading: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          child: Image.network(
+                                            doc['image'],
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
                                           ),
-                                          Text(
-                                            formattedDate,
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
-                                        child: Image.network(
-                                          doc['image'],
-                                          width: double.infinity,
-                                          height: 200,
-                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      Text(
-                                        doc['name'],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        '${doc['meal_type']} - ${doc['time_to_cook']} mins',
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
                                       Text(
                                         doc['category'],
                                         style: TextStyle(
-                                          color: Colors.grey[700],
-                                        ),
+                                            color: const Color.fromARGB(255, 0, 0, 0)),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        'Posted by: $userName',
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(255, 0, 0, 0)),
                                       ),
                                       const SizedBox(height: 10),
                                       Align(
