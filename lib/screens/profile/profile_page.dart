@@ -2,11 +2,15 @@
   Author: Carl Benedict Elipan
   Purpose of this file: Profile Page
 */
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:sheff_andrew/backend/firestore_service.dart';
+import 'package:sheff_andrew/providers/user_provider.dart';
+import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
+import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,50 +20,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Future<List<Map<String, dynamic>>> _fetchUserRecipes() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      return [];
-    }
-
-    String uid = user.uid;
-    QuerySnapshot recipesSnapshot = await FirebaseFirestore.instance
-        .collection('recipes')
-        .where('user', isEqualTo: uid)
-        .get();
-
-    return recipesSnapshot.docs.map((doc) {
-      var data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id;
-      return data;
-    }).toList();
-  }
-
-  Future<void> _deleteRecipe(BuildContext context, String recipeId) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('recipes')
-          .doc(recipeId)
-          .delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Recipe deleted successfully')),
-      );
-      setState(() {}); // Trigger a rebuild to refresh the list
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete the recipe: $e')),
-      );
-    }
-  }
+  final FirestoreService firestoreService = FirestoreService();
   double? scrolledUnderElevation = 10.0;
   Color selectedColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
+    final userKey = context.watch<UserProvider>().userKey;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Recipes'),
+        title: Text(
+          'My Profile',
+          style: GoogleFonts.poppins(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: Theme.of(context).colorScheme.shadow,
         actions: [
@@ -84,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text('Sign Out'),
               ),
             ],
-          )     
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -92,88 +68,88 @@ class _ProfilePageState extends State<ProfilePage> {
           Navigator.pushNamed(context, '/addrecipe')
               .then((_) => setState(() {}));
         },
-        label: const Text('Add recipe'),
+        label: Text(
+          'Add recipe',
+          style: GoogleFonts.poppins(),
+        ),
         icon: const Icon(Icons.add),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FutureBuilder<List<Map<String, dynamic>>>(
-              future: _fetchUserRecipes(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return const Text('Error fetching recipes');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text('No recipes found');
-                } else {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        var recipe = snapshot.data![index];
-                        return Card(
-                          child: ListTile(
-                            leading: recipe['image'] != null
-                                ? Image.network(recipe['image'])
-                                : null,
-                            title: Text(recipe['name'] ?? 'No name'),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    'Category: ${recipe['category'] ?? 'No category'}'),
-                                Text(
-                                    'Meal Type: ${recipe['meal_type'] ?? 'No meal type'}'),
-                                Text(
-                                    'Time to Cook: ${recipe['time_to_cook'] ?? 'No time to cook'}'),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () async {
-                                bool? confirm = await showDialog<bool>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Delete Recipe'),
-                                      content: const Text(
-                                          'Are you sure you want to delete this recipe?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          child: const Text('Delete'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                if (confirm == true) {
-                                  _deleteRecipe(context, recipe['id']);
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-              },
+      body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                FutureBuilder<DocumentSnapshot>(
+                  future: firestoreService.fetchUserDetails(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return Center(
+                        child: Text(
+                          'Document does not exist',
+                          style: GoogleFonts.poppins(
+                              fontSize: 28, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    } else {
+                      final Map<String, dynamic> profileData =
+                          snapshot.data!.data()! as Map<String, dynamic>;
+                      final String name = profileData['name'];
+                      // Todo: Add Image
+                      return ProfileDetails(name: name);
+                    }
+                  },
+                ),
+                const SizedBox(height: 10),
+                StreamBuilder<QuerySnapshot>(
+                  stream: firestoreService.fetchRecipesByCurrentUser(userKey),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${snapshot.error}',
+                          style: GoogleFonts.poppins(),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      final List recipeList = snapshot.data!.docs;
+                      return Column(
+                        children: recipeList.map((recipe) {
+                          final postKey = recipe.data()['post_key'] as String;
+                          final name = recipe.data()['name'] as String;
+                          final image = recipe.data()['image'] as String;
+                          final timeToCook =
+                              recipe.data()['time_to_cook'].toString();
+
+                          return ProfileRecipes(
+                            postKey: postKey,
+                            name: name,
+                            image: image,
+                            timeToCook: timeToCook,
+                            onDelete: () async {
+                              await firestoreService.deleteRecipe(postKey);
+                            },
+                          );
+                        }).toList(),
+                      );
+                    } else {
+                      return Center(
+                          child: Text(
+                        'No uploaded recipes yet',
+                        style: GoogleFonts.poppins(fontSize: 20),
+                      ));
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

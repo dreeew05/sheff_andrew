@@ -37,7 +37,8 @@ class FirestoreService {
   Future<String?> getRecipeUserName(String? userKey) async {
     try {
       // Create a query to find the document with the specified userKey
-      QuerySnapshot querySnapshot = await _users.where('userKey', isEqualTo: userKey).get();
+      QuerySnapshot querySnapshot =
+          await _users.where('userKey', isEqualTo: userKey).get();
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot userDoc = querySnapshot.docs.first;
         return userDoc['name'] as String?;
@@ -47,6 +48,13 @@ class FirestoreService {
     } catch (e) {
       return 'Null';
     }
+  }
+
+  // Fetch user details
+  Future<DocumentSnapshot> fetchUserDetails() async {
+    DocumentSnapshot documentSnapshot =
+        await _users.doc(await getCurrentUserID()).get();
+    return documentSnapshot;
   }
 
   // Fetch specific document given the post_key
@@ -60,6 +68,48 @@ class FirestoreService {
     return querySnapshot.docs.first;
   }
 
+  // Delete Recipe
+  Future<void> deleteRecipe(String postKey) async {
+    QuerySnapshot recipeSnapshots =
+        await _recipes.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot recipeInfoSnapshots =
+        await _recipeInfo.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot nutrientsSnapshots =
+        await _nutrientsInfo.where('post_key', isEqualTo: postKey).get();
+    QuerySnapshot ingredientsSnapshots =
+        await _ingredientsInfo.where('post_key', isEqualTo: postKey).get();
+
+    // Delete the posts from Recipes Collection
+    for (QueryDocumentSnapshot doc in recipeSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts from RecipeInfo Collection
+    for (QueryDocumentSnapshot doc in recipeInfoSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts Nutrients Collection
+    for (QueryDocumentSnapshot doc in nutrientsSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the posts Ingredients Collection
+    for (QueryDocumentSnapshot doc in ingredientsSnapshots.docs) {
+      await doc.reference.delete();
+    }
+
+    // Delete the post from Posts Collection
+    await _post.doc(postKey).delete();
+  }
+
+  // Fetch all recipes from the user
+  Stream<QuerySnapshot> fetchRecipesByCurrentUser(String userKey) {
+    final allRecipesByUserStream =
+        _recipes.where('user', isEqualTo: userKey).snapshots();
+    return allRecipesByUserStream;
+  }
+
   // Fetch all recipes
   Stream<QuerySnapshot> getRecipeStream() {
     final recipeStream = _recipes.snapshots();
@@ -70,8 +120,8 @@ class FirestoreService {
   Stream<QuerySnapshot> getSearchedRecipeStream(String query) {
     final relevantRecipeStream = _recipes
         .orderBy('name')
-        .startAt([capitalizeFirstLetter(query)])
-        .endAt(['${capitalizeFirstLetter(query)}\uf8ff']); 
+        .startAt([capitalizeFirstLetter(query)]).endAt(
+            ['${capitalizeFirstLetter(query)}\uf8ff']);
     return relevantRecipeStream.snapshots();
   }
 
