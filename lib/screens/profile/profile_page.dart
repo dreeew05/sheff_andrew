@@ -81,13 +81,19 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'choose_theme',
-                child: Text('Choose Theme'),
+                child: Text(
+                  'Choose Theme',
+                  style: GoogleFonts.poppins(),
+                ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'sign_out',
-                child: Text('Sign Out'),
+                child: Text(
+                  'Sign Out',
+                  style: GoogleFonts.poppins(),
+                ),
               ),
             ],
           )
