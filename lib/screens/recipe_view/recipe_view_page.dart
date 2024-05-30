@@ -36,7 +36,6 @@ class RecipeViewPage extends StatelessWidget {
                     final Map<String, dynamic> recipeData =
                         snapshot.data!.data()!;
                     final image = recipeData['image'];
-
                     final name = recipeData['name'];
                     return BasicRecipeDetails(image: image, name: name);
                   }
