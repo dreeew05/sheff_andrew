@@ -5,10 +5,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sheff_andrew/common/components/network_image_check.dart';
 import 'package:sheff_andrew/common/utils/app_painter.dart';
-import 'package:sheff_andrew/screens/recipes/recipe_view_page.dart';
+import 'package:sheff_andrew/common/utils/constants.dart';
+import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 
-class FeaturedRecipe extends StatelessWidget {
+class FeaturedRecipe extends StatefulWidget {
   // final Map<String, dynamic> recipe;
   final String image;
   final String name;
@@ -24,8 +26,32 @@ class FeaturedRecipe extends StatelessWidget {
   });
 
   @override
+  _FeaturedRecipeState createState() => _FeaturedRecipeState();
+}
+
+class _FeaturedRecipeState extends State<FeaturedRecipe> {
+  String _imageLink = '';
+
+  final NetworkImageCheck networkImageCheck = NetworkImageCheck();
+  final Constants constants = Constants();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkImageURL();
+  }
+
+  Future<void> _checkImageURL() async {
+    String imageLink = await networkImageCheck.checkImageURL(
+        widget.image, constants.defaultRecipeImageLink);
+    setState(() {
+      _imageLink = imageLink;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    AppPainter appPainter = AppPainter();
+    final AppPainter appPainter = AppPainter();
     return Container(
       height: 275,
       width: 175,
@@ -52,12 +78,12 @@ class FeaturedRecipe extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      RecipeViewPage(postKey: postKey)));
+                                      RecipeViewPage(postKey: widget.postKey)));
                         },
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            name,
+                            widget.name,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
@@ -79,7 +105,7 @@ class FeaturedRecipe extends StatelessWidget {
                             )),
                       ),
                       const Padding(padding: EdgeInsets.only(top: 5)),
-                      Text('$timeToCook Mins',
+                      Text('${widget.timeToCook} Mins',
                           style: GoogleFonts.poppins(
                             color: appPainter.getCardTextColor(),
                             fontSize: 14,
@@ -103,7 +129,7 @@ class FeaturedRecipe extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 100,
                         backgroundImage: NetworkImage(
-                          image,
+                          _imageLink,
                         ) as ImageProvider<Object>?,
                       ),
                     )),
