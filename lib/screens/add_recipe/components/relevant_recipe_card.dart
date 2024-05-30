@@ -11,6 +11,7 @@ import 'package:sheff_andrew/models/ingredient.dart';
 import 'package:sheff_andrew/models/nutrients.dart';
 import 'package:sheff_andrew/providers/generative_search_provider.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
+import 'package:sheff_andrew/providers/tab_controller_provider.dart';
 
 class RelevantRecipeCard extends StatelessWidget {
   final int index;
@@ -29,6 +30,7 @@ class RelevantRecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final providerWatcherGS = context.watch<GenerativeSearchProvider>();
     final providerReaderRF = context.read<RecipeFormProvider>();
+    final providerReaderTab = context.read<TabControllerProvider>();
     final cap = CapitalizeString();
     return Card(
       child: Container(
@@ -187,6 +189,9 @@ class RelevantRecipeCard extends StatelessWidget {
                             cautions.add(cap.capitalize(label.toString()));
                           }
                           providerReaderRF.setCautionsFromSearch(cautions);
+
+                          // Go back to form
+                          providerReaderTab.moveBackToForm();
                         },
                         child: Text(
                           'Use this recipe',
