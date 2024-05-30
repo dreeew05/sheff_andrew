@@ -5,11 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'theming.dart';
 
-// For sign out
-Future<void> signOut() async {
-  await FirebaseAuth.instance.signOut();
-}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -55,23 +52,39 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
+  double? scrolledUnderElevation = 10.0;
+  Color selectedColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Your Recipes'),
+        scrolledUnderElevation: scrolledUnderElevation,
+        shadowColor: Theme.of(context).colorScheme.shadow,
         actions: [
-          GestureDetector(
-            onTap: () => signOut(),
-            child: Row(
-              children: [
-                const Text("Sign out"),
-                IconButton(
-                    onPressed: () => signOut(), icon: const Icon(Icons.logout)),
-              ],
-            ),
-          ),
+          PopupMenuButton<String>(
+            onSelected: (String result) {
+              switch (result) {
+                case 'choose_theme':
+                  chooseTheme(context);
+                  break;
+                case 'sign_out':
+                  signOut();
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'choose_theme',
+                child: Text('Choose Theme'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'sign_out',
+                child: Text('Sign Out'),
+              ),
+            ],
+          )     
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -86,10 +99,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Profile Page',
-              style: TextStyle(fontSize: 24),
-            ),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: _fetchUserRecipes(),
               builder: (context, snapshot) {

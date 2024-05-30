@@ -52,7 +52,6 @@ class AppNavigatorState extends State<AppNavigator> {
             });
           },
           selectedIndex: _selectedIndex,
-          indicatorColor: Colors.amber,
           destinations: const <Widget>[
             NavigationDestination(
               selectedIcon: Icon(Icons.home),
