@@ -15,7 +15,6 @@ class TabControllerProvider extends ChangeNotifier {
 
   void initTabController(int length, TickerProvider tickerProvider) {
     _tabController ??= TabController(length: length, vsync: tickerProvider);
-    // notifyListeners();
   }
 
   void moveBackToForm() {
