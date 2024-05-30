@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sheff_andrew/common/utils/app_painter.dart';
 import 'package:sheff_andrew/dialogs/form_error_dialog.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 import 'package:sheff_andrew/screens/add_recipe/components/recipe_additional_information.dart';
@@ -56,7 +55,6 @@ class RecipeFormState extends State<RecipeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final AppPainter appPainter = AppPainter();
     final providerWatcher = context.watch<RecipeFormProvider>();
 
     void isActionValid(int nextIndex) {

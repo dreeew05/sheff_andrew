@@ -58,6 +58,7 @@ class ThemeChooserDialog extends StatelessWidget {
           title: const Text('Choose Theme'),
           content: Container(
             width: double.maxFinite,
+            height: 200,
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,

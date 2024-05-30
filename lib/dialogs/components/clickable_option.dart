@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:sheff_andrew/common/utils/app_painter.dart';
 import 'package:sheff_andrew/providers/recipe_form_provider.dart';
 
 class ClickableOption extends StatelessWidget {
@@ -53,7 +52,6 @@ class ClickableOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appPainter = AppPainter();
 
     return SizedBox(
       height: 70,
@@ -66,7 +64,7 @@ class ClickableOption extends StatelessWidget {
           Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: appPainter.getDialogOptionColor(),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           textStyle: GoogleFonts.poppins(fontSize: 16),
           shape: getOrientation(),
         ),

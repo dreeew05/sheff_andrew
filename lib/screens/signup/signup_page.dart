@@ -38,7 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
           // Navigate to the next page or show a success message
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sign up successful!')),
+            SnackBar(content: Text('Sign up successful!')),
           );
           Navigator.pushNamed(context, '/');
         }
@@ -49,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
       }
     } else if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You need to accept terms & conditions')),
+        SnackBar(content: Text('You need to accept terms & conditions')),
       );
     }
   }
@@ -66,23 +66,23 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'Create an account',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     "Let's help you set up your account,\nit won't take long.",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Name',
                       border: OutlineInputBorder(),
                     ),
@@ -93,10 +93,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(),
                     ),
@@ -107,10 +107,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                     ),
@@ -151,17 +151,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     controlAffinity: ListTileControlAffinity.leading,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _signUp,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
+                      minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     child:
-                        const Text('Sign Up')
+                        Text('Sign Up')
                   ),
                   TextButton(
                       onPressed: () {

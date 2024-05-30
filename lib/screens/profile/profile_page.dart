@@ -3,6 +3,7 @@
   Purpose of this file: Profile Page
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,35 @@ import 'package:sheff_andrew/providers/user_provider.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
+
+//Alert Dialogue for signing out
+Future<void> _signOutDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Sign out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              signOut();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Sign out'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -46,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   chooseTheme(context);
                   break;
                 case 'sign_out':
-                  signOut();
+                  _signOutDialog(context);
                   break;
               }
             },

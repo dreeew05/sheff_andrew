@@ -134,7 +134,6 @@ class GenerativeSearchState extends State<GenerativeSearch> {
                               border: const OutlineInputBorder(),
                               errorBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
-                                color: Color.fromARGB(255, 214, 44, 32),
                                 width: 1.0,
                               )),
                               labelStyle: GoogleFonts.poppins(),
@@ -143,8 +142,8 @@ class GenerativeSearchState extends State<GenerativeSearch> {
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
