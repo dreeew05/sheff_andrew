@@ -95,9 +95,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 2,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: CircularProgressIndicator()));
+                      child: const CircularProgressIndicator());
                   }
                   if (!snapshot.hasData) {
                     return const Text('No data available');
