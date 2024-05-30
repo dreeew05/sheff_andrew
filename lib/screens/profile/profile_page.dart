@@ -31,7 +31,7 @@ Future<void> _signOutDialog(BuildContext context) async {
           ),
           TextButton(
             onPressed: () {
-              _signOut();
+              signOut();
               Navigator.of(context).pop();
             },
             child: const Text('Sign out'),
@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   chooseTheme(context);
                   break;
                 case 'sign_out':
-                  signOut();
+                  _signOutDialog(context);
                   break;
               }
             },
