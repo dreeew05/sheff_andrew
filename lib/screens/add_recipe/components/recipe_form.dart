@@ -154,10 +154,16 @@ class RecipeFormState extends State<RecipeForm> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
                     child: Text(
                       isLastStep ? 'Submit' : 'Next',
-                      style: GoogleFonts.poppins(),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
