@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 
-class CommunityPage extends StatelessWidget {
+class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
 
+  @override
+  State<CommunityPage> createState() => _CommunityPageState();
+}
+
+class _CommunityPageState extends State<CommunityPage> {
+  
   Future<Map<String, dynamic>?> fetchPostData(String postKey) async {
     // Fetch the post data from the 'posts' collection based on the post_key
     DocumentSnapshot postSnapshot =
@@ -26,29 +32,72 @@ class CommunityPage extends StatelessWidget {
     }
     return null;
   }
+  Future<List<String>> getAllCategories() async {
+    // Reference to your Firestore collection
+    CollectionReference collectionRef = FirebaseFirestore.instance.collection('recipes');
+
+    // Get all documents in the collection
+    QuerySnapshot querySnapshot = await collectionRef.get();
+
+    // Extract the 'category' field from each document
+    List<String> categories = querySnapshot.docs.map((doc) => doc['category'] as String).toList();
+
+    // Get unique categories
+    List<String> uniqueCategories = categories.toSet().toList();
+
+    return uniqueCategories;
+  }
+
+  bool showFilterChips = false;
+  Future<List<String>>? _categoriesFuture;
+  List<String> selectedCategories = [];
+
+    @override
+  void initState() {
+    super.initState();
+    _categoriesFuture = getAllCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Community'),
+        title: const Center(child: Text('Community Recipes')),
+        leading: const Icon(Icons.food_bank),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.filter_list_alt),
+            onPressed: () {
+              setState(() {
+                if (showFilterChips) {
+                  selectedCategories.clear(); // Clear the selected categories
+                }
+                showFilterChips = !showFilterChips;
+              });
+            }
+          )
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Community Info',
-              style: TextStyle(fontSize: 24),
-            ),
+            catergoryChips(),
             Expanded(
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('recipes')
-                    .snapshots(),
+                stream: (selectedCategories.isEmpty)
+                        ? FirebaseFirestore.instance.collection('recipes').snapshots()
+                        : FirebaseFirestore.instance
+                            .collection('recipes')
+                            .where('category', whereIn: selectedCategories)
+                            .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 2,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: CircularProgressIndicator()));
                   }
                   if (!snapshot.hasData) {
                     return const Text('No data available');
@@ -166,5 +215,47 @@ class CommunityPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  FutureBuilder<List<String>> catergoryChips() {
+    return FutureBuilder<List<String>>(
+            future: _categoriesFuture,
+            builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('No categories found.'));
+              } else if (!showFilterChips) {
+                  return SizedBox.shrink();
+              } else {
+                List<String> categories = snapshot.data!;
+                return Container(
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: categories.map((category) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: FilterChip(
+                          selected: selectedCategories.contains(category),
+                          onSelected: (bool selected) {
+                            setState(() {
+                              if (selected) {
+                                selectedCategories.add(category);
+                              } else {
+                                selectedCategories.remove(category);
+                              }
+                            });
+                          },
+                          label: Text(category),
+                        ));
+                    }).toList(),
+                  ),
+                );
+              }
+            },
+          );
   }
 }
