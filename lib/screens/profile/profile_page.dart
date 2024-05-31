@@ -18,21 +18,33 @@ Future<void> _signOutDialog(BuildContext context) async {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Sign out'),
-        content: const Text('Are you sure you want to sign out?'),
+        title: Text(
+          'Sign out',
+          style: GoogleFonts.poppins(),
+        ),
+        content: Text(
+          'Are you sure you want to sign out?',
+          style: GoogleFonts.poppins(),
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(),
+            ),
           ),
           TextButton(
             onPressed: () {
               signOut();
               Navigator.of(context).pop();
             },
-            child: const Text('Sign out'),
+            child: Text(
+              'Sign out',
+              style: GoogleFonts.poppins(),
+            ),
           ),
         ],
       );
@@ -79,13 +91,19 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'choose_theme',
-                child: Text('Choose Theme'),
+                child: Text(
+                  'Choose Theme',
+                  style: GoogleFonts.poppins(),
+                ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'sign_out',
-                child: Text('Sign Out'),
+                child: Text(
+                  'Sign Out',
+                  style: GoogleFonts.poppins(),
+                ),
               ),
             ],
           )
