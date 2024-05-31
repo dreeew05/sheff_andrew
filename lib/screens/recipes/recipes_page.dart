@@ -18,7 +18,6 @@ class _RecipesPageState extends State<RecipesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       // Invisible AppBar
       appBar: null,
       body: Padding(
