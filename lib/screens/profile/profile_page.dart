@@ -11,7 +11,6 @@ import 'package:sheff_andrew/providers/user_provider.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
-import 'iconing.dart';
 
 //Alert Dialogue for signing out
 Future<void> _signOutDialog(BuildContext context) async {
