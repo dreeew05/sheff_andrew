@@ -6,6 +6,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sheff_andrew/screens/recipe_view/components/ingredient_card.dart';
 
 class RecipeTabView extends StatefulWidget {
   final String postKey;
@@ -83,11 +84,10 @@ class _RecipeTabViewState extends State<RecipeTabView>
                       itemCount: ingredients.length,
                       itemBuilder: (context, index) {
                         final ingredient = ingredients[index];
-                        final image = ingredient['image'] as String? ?? '';
-                        final label =
-                            ingredient['label'] as String? ?? 'Unknown';
-                        final quantity = ingredient['quantity'] as double? ?? 0;
-                        final unit = ingredient['unit'] as String? ?? '';
+                        final image = ingredient['image'];
+                        final label = ingredient['label'];
+                        final quantity = ingredient['quantity'];
+                        final unit = ingredient['unit'];
 
                         return Card(
                           margin: const EdgeInsets.only(
@@ -96,18 +96,24 @@ class _RecipeTabViewState extends State<RecipeTabView>
                             top: 5,
                             bottom: 5,
                           ),
-                          child: ListTile(
-                            leading: image.isNotEmpty
-                                ? Image.network(image)
-                                : const Icon(Icons.image),
-                            title: Text(
-                              label,
-                              style: GoogleFonts.poppins(),
-                            ),
-                            subtitle: Text(
-                              '$quantity $unit',
-                              style: GoogleFonts.poppins(),
-                            ),
+                          // child: ListTile(
+                          //   leading: image.isNotEmpty
+                          //       ? Image.network(image)
+                          //       : const Icon(Icons.image),
+                          //   title: Text(
+                          //     label,
+                          //     style: GoogleFonts.poppins(),
+                          //   ),
+                          //   subtitle: Text(
+                          //     '$quantity $unit',
+                          //     style: GoogleFonts.poppins(),
+                          //   ),
+                          // ),
+                          child: IngredientCard(
+                            image: image,
+                            name: label,
+                            quantity: quantity.toString(),
+                            unit: unit,
                           ),
                         );
                       },

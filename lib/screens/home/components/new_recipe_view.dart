@@ -44,47 +44,49 @@ class _NewRecipeViewState extends State<NewRecipeView> {
     return Row(
       children: [
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecipeViewPage(postKey: widget.postKey),
-              ),
-            );
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: NetworkImage(_imageLink),
-                    fit: BoxFit.cover,
-                  ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecipeViewPage(postKey: widget.postKey),
                 ),
-              ),
-              const SizedBox(height: 7),
-              SizedBox(
-                width: 150,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Text(
-                    widget.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.fade,
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              );
+            },
+            child: SizedBox(
+              height: 225,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(_imageLink),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ),
+                  const SizedBox(height: 7),
+                  SizedBox(
+                    width: 150,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      child: Text(
+                        widget.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )),
         const SizedBox(width: 20)
       ],
     );

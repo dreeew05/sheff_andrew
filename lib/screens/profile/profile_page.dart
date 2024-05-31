@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
 import 'package:sheff_andrew/providers/user_provider.dart';
-import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
 
@@ -111,7 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               FutureBuilder<DocumentSnapshot>(
                 future: firestoreService.fetchUserDetails(),
-                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
@@ -120,26 +120,36 @@ class _ProfilePageState extends State<ProfilePage> {
                     return Center(
                       child: Text(
                         'Document does not exist',
-                        style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.poppins(
+                            fontSize: 28, fontWeight: FontWeight.bold),
                       ),
                     );
                   } else {
-                    final Map<String, dynamic> profileData = snapshot.data!.data()! as Map<String, dynamic>;
+                    final Map<String, dynamic> profileData =
+                        snapshot.data!.data()! as Map<String, dynamic>;
                     final String name = profileData['name'];
-                    final String profileImage = profileData['profileImage'] ?? '';
+                    final String profileImage =
+                        profileData['profileImage'] ?? '';
                     return Column(
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: profileImage.isNotEmpty ? NetworkImage(profileImage) : null,
-                          child: profileImage.isEmpty ? Icon(Icons.person, size: 50) : null,
+                          backgroundImage: profileImage.isNotEmpty
+                              ? NetworkImage(profileImage)
+                              : null,
+                          child: profileImage.isEmpty
+                              ? const Icon(Icons.person, size: 50)
+                              : null,
                         ),
                         const SizedBox(height: 10),
                         Text(
                           name,
-                          style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.poppins(
+                              fontSize: 28, fontWeight: FontWeight.bold),
                         ),
-                        ProfileDetails(name: name),
+                        const SizedBox(height: 10),
+                        const Divider(),
+                        const SizedBox(height: 10),
                       ],
                     );
                   }
@@ -165,7 +175,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         final postKey = recipe.data()['post_key'] as String;
                         final name = recipe.data()['name'] as String;
                         final image = recipe.data()['image'] as String;
-                        final timeToCook = recipe.data()['time_to_cook'].toString();
+                        final timeToCook =
+                            recipe.data()['time_to_cook'].toString();
 
                         return ProfileRecipes(
                           postKey: postKey,

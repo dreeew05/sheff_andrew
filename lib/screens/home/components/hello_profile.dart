@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class HelloProfile extends StatelessWidget {
   final String name;
-  // final String image;
+  final String image;
 
   const HelloProfile({
     super.key,
     required this.name,
-    // required this.image,
+    required this.image,
   });
 
   @override
@@ -38,6 +38,7 @@ class HelloProfile extends StatelessWidget {
         CircleAvatar(
           radius: 35,
           backgroundColor: Colors.blue[200],
+          backgroundImage: NetworkImage(image),
         ),
       ],
     );

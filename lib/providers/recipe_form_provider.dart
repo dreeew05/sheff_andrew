@@ -100,11 +100,11 @@ class RecipeFormProvider extends ChangeNotifier {
 
     // Upload each Ingredient Image
     for (Ingredient ingredient in _ingredients) {
-      if (ingredient is File) {
+      if (ingredient.image is File) {
         String ingredientImageLink = await fStorageService
             .uploadImageAngGetLink(ingredient.image, ingredientsImagesFolder);
         ingredient.replaceToLink(ingredientImageLink);
-      } else {
+      } else if (ingredient.image == null) {
         ingredient.replaceToLink(defaultIngredientImage);
       }
     }

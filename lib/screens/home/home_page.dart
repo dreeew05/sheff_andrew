@@ -57,8 +57,11 @@ class HomePageState extends State<HomePage> {
                       final Map<String, dynamic> profileData =
                           snapshot.data!.data()! as Map<String, dynamic>;
                       final String name = profileData['name'];
-                      // Todo: Add Image
-                      return HelloProfile(name: name);
+                      final String image = profileData['profileImage'];
+                      return HelloProfile(
+                        name: name,
+                        image: image,
+                      );
                     }
                   },
                 ),
