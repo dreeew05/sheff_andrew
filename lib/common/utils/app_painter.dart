@@ -7,7 +7,7 @@ import 'dart:ui';
 
 class AppPainter {
   getCardColor() {
-    return const Color.fromRGBO(241, 241, 241, 1);
+    return const Color.fromRGBO(236, 236, 236, 1);
   }
 
   getCardTextColor() {

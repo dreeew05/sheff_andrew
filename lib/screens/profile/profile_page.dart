@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sheff_andrew/backend/firestore_service.dart';
 import 'package:sheff_andrew/providers/user_provider.dart';
-import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
 
@@ -128,10 +127,30 @@ class _ProfilePageState extends State<ProfilePage> {
                       final Map<String, dynamic> profileData =
                           snapshot.data!.data()! as Map<String, dynamic>;
                       final String name = profileData['name'];
-                      final String profileimage = profileData['profileImage'];
-                      // Todo: Add Image
-                      return ProfileDetails(
-                          name: name, profileImage: profileimage);
+                      final String profileImage =
+                          profileData['profileImage'] ?? '';
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: profileImage.isNotEmpty
+                                ? NetworkImage(profileImage)
+                                : null,
+                            child: profileImage.isEmpty
+                                ? const Icon(Icons.person, size: 50)
+                                : null,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            name,
+                            style: GoogleFonts.poppins(
+                                fontSize: 28, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          const Divider(),
+                          const SizedBox(height: 10),
+                        ],
+                      );
                     }
                   },
                 ),
