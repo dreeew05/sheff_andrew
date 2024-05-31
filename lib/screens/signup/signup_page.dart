@@ -14,9 +14,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _acceptTerms = false;
+  String _selectedProfileImage = '';
 
   void _signUp() async {
     if (_formKey.currentState!.validate() && _acceptTerms) {
@@ -27,14 +27,12 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         if (newUser != null) {
           // Add user information to Firestore
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(newUser.user!.uid)
-              .set({
+          await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
             'name': _nameController.text.trim(),
             'email': _emailController.text.trim(),
             'userKey': newUser.user!.uid,
             'bookmarks': [],
+            'profileImage': _selectedProfileImage,
           });
 
           // Navigate to the next page or show a success message
@@ -52,6 +50,47 @@ class _SignUpPageState extends State<SignUpPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('You need to accept terms & conditions')),
       );
+    }
+  }
+
+  void _chooseProfilePicture() async {
+    final selectedImage = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Profile Picture'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () => Navigator.pop(context, 'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_4.png?alt=media&token=4519230f-bb80-4e41-aab7-49004217cd5b'),
+                child: Image.network('https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_4.png?alt=media&token=4519230f-bb80-4e41-aab7-49004217cd5b', height: 50),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => Navigator.pop(context, 'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_3.png?alt=media&token=7df54d3f-ec20-4362-9a88-8f3e03aa0ce7'),
+                child: Image.network('https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_3.png?alt=media&token=7df54d3f-ec20-4362-9a88-8f3e03aa0ce7', height: 50),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => Navigator.pop(context, 'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_2.png?alt=media&token=bca831b3-4c6e-4c23-95ed-c7ba98181756'),
+                child: Image.network('https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_2.png?alt=media&token=bca831b3-4c6e-4c23-95ed-c7ba98181756', height: 50),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => Navigator.pop(context, 'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_1.png?alt=media&token=77e2c6ba-b2bb-454b-9427-f96326964564'),
+                child: Image.network('https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_1.png?alt=media&token=77e2c6ba-b2bb-454b-9427-f96326964564', height: 50),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selectedImage != null) {
+      setState(() {
+        _selectedProfileImage = selectedImage;
+      });
     }
   }
 
@@ -151,6 +190,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       });
                     },
                     controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: _chooseProfilePicture,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Text('Choose Profile Picture'),
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
