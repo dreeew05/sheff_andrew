@@ -42,3 +42,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 *.yaml
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugin_registrant.cc
+*.cc
+*.cmake
+*.swift

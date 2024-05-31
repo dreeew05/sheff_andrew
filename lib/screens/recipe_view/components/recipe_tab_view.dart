@@ -8,6 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sheff_andrew/screens/recipe_view/components/ingredient_card.dart';
 
+final Map<String, String> infoDescriptionMap = {
+  'calories': 'Calories',
+  'cautions': 'Cautions',
+  'health_labels': 'Health Labels',
+  'diet_labels': 'Diet Labels'
+};
+
+final Map<String, Widget> infoIconMap = {
+  'calories': const Icon(Icons.electric_bolt_outlined),
+  'cautions': const Icon(Icons.warning_outlined),
+  'health_labels': const Icon(Icons.local_hospital_outlined),
+  'diet_labels': const Icon(Icons.food_bank_outlined)
+};
+
 class RecipeTabView extends StatefulWidget {
   final String postKey;
   const RecipeTabView({super.key, required this.postKey});
@@ -169,13 +183,82 @@ class _RecipeTabViewState extends State<RecipeTabView>
                     );
                   },
                 ),
-                // Todo: Put additonal information here
-                Text('data'),
-              ],
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('recipe_info')
+                      .where('post_key', isEqualTo: widget.postKey)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(
+                          child: Text(
+                        'No procedure steps found.',
+                        style: GoogleFonts.poppins(),
+                      ));
+                    }
+                   // Get the list of documents in the snapshot
+                    final documents = snapshot.data!.docs.first;
+                    final docData = documents.data() as Map<String, dynamic>;
+
+                    // Check if there are no documents
+
+                    return ListView(
+                      scrollDirection: Axis.vertical,
+                      children: 
+                        docData.entries.map((entry) {
+                          if(infoDescriptionMap.containsKey(entry.key) && entry.value.toString() != '[]'){
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      infoIconMap[entry.key] ?? Container(),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 4.0),
+                                        child: Text(
+                                        '${infoDescriptionMap[entry.key]}', 
+                                          style: GoogleFonts.poppins(fontSize: 16)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (entry.value is List<dynamic>)
+                                  Wrap(
+                                    children: entry.value.map<Widget>((label){
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Chip(label: Text(label.toString()), backgroundColor: Theme.of(context).colorScheme.secondaryContainer,),
+                                      );
+                                    }).toList(),
+                                  ),
+                                if(entry.value is String)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+                                    child: Text('Amount: ${entry.value}', style: GoogleFonts.poppins()),
+                                  )
+                              ]
+                            );
+                          }
+                            return const SizedBox.shrink();
+                          }).toList()
+                      ,
+                      );
+                      },
+                    )
+                  ]
+                )
+              )
+            ]
             ),
-          )
-        ],
-      ),
-    );
+        );
   }
 }

@@ -15,11 +15,10 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  bool _acceptTerms = false;
   String _selectedProfileImage = '';
 
   void _signUp() async {
-    if (_formKey.currentState!.validate() && _acceptTerms) {
+    if (_formKey.currentState!.validate()) {
       try {
         final newUser = await _auth.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
@@ -46,13 +45,8 @@ class _SignUpPageState extends State<SignUpPage> {
           SnackBar(content: Text(e.toString())),
         );
       }
-    } else if (!_acceptTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You need to accept terms & conditions')),
-      );
     }
   }
-
   void _chooseProfilePicture() async {
     final selectedImage = await showDialog<String>(
       context: context,
@@ -63,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap: () => Navigator.pop(context, 'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_4.png?alt=media&token=4519230f-bb80-4e41-aab7-49004217cd5b'),
+                onTap: () => Navigator.pop(context, 'https://fir  ebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_4.png?alt=media&token=4519230f-bb80-4e41-aab7-49004217cd5b'),
                 child: Image.network('https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fchef_icon_4.png?alt=media&token=4519230f-bb80-4e41-aab7-49004217cd5b', height: 50),
               ),
               SizedBox(height: 10),
@@ -120,6 +114,26 @@ class _SignUpPageState extends State<SignUpPage> {
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: _chooseProfilePicture,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: _selectedProfileImage.isNotEmpty
+                          ? NetworkImage(_selectedProfileImage)
+                          : null,
+                      child: _selectedProfileImage.isEmpty
+                          ? Icon(
+                              Icons.person,
+                              size: 50,
+                              color: Colors.black,
+                            )
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text("Choose your profile icon"),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(
@@ -181,17 +195,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  CheckboxListTile(
-                    title: const Text("Accept terms & Condition"),
-                    value: _acceptTerms,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _acceptTerms = newValue!;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                  SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: _chooseProfilePicture,
                     style: ElevatedButton.styleFrom(
