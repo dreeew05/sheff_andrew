@@ -3,7 +3,6 @@
   Purpose of this file: Profile Page
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +11,7 @@ import 'package:sheff_andrew/providers/user_provider.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_details.dart';
 import 'package:sheff_andrew/screens/profile/components/profile_recipes.dart';
 import 'theming.dart';
+import 'iconing.dart';
 
 //Alert Dialogue for signing out
 Future<void> _signOutDialog(BuildContext context) async {
@@ -129,8 +129,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       final Map<String, dynamic> profileData =
                           snapshot.data!.data()! as Map<String, dynamic>;
                       final String name = profileData['name'];
+                      final String profileimage = profileData['profileImage'];
                       // Todo: Add Image
-                      return ProfileDetails(name: name);
+                      return ProfileDetails(
+                          name: name, profileImage: profileimage);
                     }
                   },
                 ),
