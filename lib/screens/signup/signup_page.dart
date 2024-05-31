@@ -14,8 +14,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _acceptTerms = false;
   String _selectedProfileImage = '';
 
@@ -28,10 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         if (newUser != null) {
           // Add user information to Firestore
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(newUser.user!.uid)
-              .set({
+          await FirebaseFirestore.instance.collection('users').doc(newUser.user!.uid).set({
             'name': _nameController.text.trim(),
             'email': _emailController.text.trim(),
             'userKey': newUser.user!.uid,
@@ -228,6 +224,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
+
                       child: Text('Sign Up')),
                   TextButton(
                       onPressed: () {

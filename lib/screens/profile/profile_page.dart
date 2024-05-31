@@ -1,7 +1,3 @@
-/*
-  Author: Carl Benedict Elipan
-  Purpose of this file: Profile Page
-*/
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
