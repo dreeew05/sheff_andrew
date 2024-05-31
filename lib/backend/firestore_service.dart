@@ -28,6 +28,10 @@ class FirestoreService {
   final CollectionReference _nutrientsInfo =
       FirebaseFirestore.instance.collection('nutrients');
 
+  // Getters
+  CollectionReference get users => _users;
+  CollectionReference get recipes => _recipes;
+
   // Get user
   Future<String?> getCurrentUserID() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -102,6 +106,13 @@ class FirestoreService {
     // Delete the post from Posts Collection
     await _post.doc(postKey).delete();
   }
+
+  // Fetch bookmarked recipes by current user
+  // Future<List<String>> fetchBookmarkedRecipes(String userKey) async {
+  //   DocumentSnapshot doc = await _users.doc(userKey).get();
+  //   List<String> bookmarks = doc.get('bookmarks');
+  //   return bookmarks;
+  // }
 
   // Fetch all recipes from the user
   Stream<QuerySnapshot> fetchRecipesByCurrentUser(String userKey) {
