@@ -32,13 +32,15 @@ class SignInPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Image.network(
+                    'https://firebasestorage.googleapis.com/v0/b/sheff-andrew-e1613.appspot.com/o/profileicons%2Fsheffandrew.png?alt=media&token=ddc41bde-aab9-4c87-b7bc-b2ef589c773b'),
                 Text(
-                  'Hello,',
+                  'Hello',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 18),
                 Text(
-                  'Welcome Back!',
+                  'Welcome!',
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 32),
@@ -81,7 +83,8 @@ class SignInPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text('Sign In', style: TextStyle(color: Theme.of(context).primaryColor)),
+                  child: Text('Sign In',
+                      style: TextStyle(color: Theme.of(context).primaryColor)),
                 ),
                 TextButton(
                     onPressed: () {
