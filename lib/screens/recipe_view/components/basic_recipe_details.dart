@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sheff_andrew/backend/firestore_service.dart';
 import 'package:sheff_andrew/common/components/network_image_check.dart';
 import 'package:sheff_andrew/common/utils/constants.dart';
 import 'package:sheff_andrew/providers/user_provider.dart';
@@ -26,6 +27,7 @@ class BasicRecipeDetails extends StatefulWidget {
 class _BasicRecipeDetailsState extends State<BasicRecipeDetails> {
   bool _isBookmarked = false;
   String _imageLink = '';
+  final FirestoreService firestoreService = FirestoreService();
   final NetworkImageCheck networkImageCheck = NetworkImageCheck();
   final Constants constants = Constants();
 
@@ -34,16 +36,20 @@ class _BasicRecipeDetailsState extends State<BasicRecipeDetails> {
   @override
   void initState() {
     super.initState();
-    _checkImageURL();
     _checkBookmarkStatus();
+    _checkImageURL();
   }
 
   void _checkBookmarkStatus() async {
-    final userKey = context.watch<UserProvider>().userKey;
-    final doc = await firestore.collection('users').doc(userKey).get();
-    setState(() {
-      _isBookmarked = doc.data()?['bookmarks'].contains(widget.postKey);
-    });
+    final userKey = context.read<UserProvider>().userKey;
+    final snapshot = await firestoreService.users.doc(userKey).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> userData = snapshot.data()! as Map<String, dynamic>;
+      List<dynamic> bookmarks = userData['bookmarks'];
+      setState(() {
+        _isBookmarked = bookmarks.contains(widget.postKey);
+      });
+    }
   }
 
   void _toggleBookmark() async {
