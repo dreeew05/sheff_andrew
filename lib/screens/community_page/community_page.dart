@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sheff_andrew/screens/recipe_view/recipe_view_page.dart';
 
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({super.key});
+  const CommunityPage({Key? key}) : super(key: key);
 
   @override
   State<CommunityPage> createState() => _CommunityPageState();
@@ -38,7 +38,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 }
                 showFilterChips = !showFilterChips;
               });
-            }
+            },
           )
         ],
       ),
@@ -93,7 +93,9 @@ class _CommunityPageState extends State<CommunityPage> {
                                 return const Center(child: Text('User data not available'));
                               }
 
-                              final userName = userSnapshot.data!['name'];
+                              final userData = userSnapshot.data!.data() as Map<String, dynamic>;
+                              final userName = userData['name'];
+                              final profileImage = userData['profileImage'];
 
                               return Card(
                                 margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -102,21 +104,30 @@ class _CommunityPageState extends State<CommunityPage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                      Row(
                                         children: [
-                                          Text(
-                                            userName,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
+                                          CircleAvatar(
+                                            backgroundImage: NetworkImage(profileImage),
+                                            radius: 20,
                                           ),
-                                          Text(
-                                            formattedDate,
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                            ),
+                                          const SizedBox(width: 10),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                userName,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                formattedDate,
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -161,7 +172,7 @@ class _CommunityPageState extends State<CommunityPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => RecipeViewPage(
-                                                  postKey: doc['post_key']
+                                                  postKey: doc['post_key'],
                                                 ),
                                               ),
                                             );
